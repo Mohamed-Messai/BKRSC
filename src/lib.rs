@@ -175,20 +175,20 @@ impl EnergyConsumption<Node, MetricsType> for Node {
         match status {
             NodeStatus::Compromised => {
                 match self.kind {
-                    NodeType::Gateway => 0.0,
-                    NodeType::Constrained => 0.0,
+                    NodeType::Gateway => metrics.energy.compromised.gateway,
+                    NodeType::Constrained => metrics.energy.compromised.constrained,
                 }
             }
             NodeStatus::Leaving => {
                 match self.kind {
-                    NodeType::Gateway => 0.0,
-                    NodeType::Constrained => 0.0,
+                    NodeType::Gateway => metrics.energy.leaving.gateway,
+                    NodeType::Constrained => metrics.energy.leaving.constrained,
                 }
             }
             NodeStatus::Draining => {
                 match self.kind {
-                    NodeType::Gateway => 0.0,
-                    NodeType::Constrained => 0.0,
+                    NodeType::Gateway => metrics.energy.draining.gateway,
+                    NodeType::Constrained => metrics.energy.draining.constrained,
                 }
             }
         }
@@ -200,20 +200,20 @@ impl CommunicationOverhead<Node, MetricsType> for Node {
         match status {
             NodeStatus::Compromised => {
                 match self.kind {
-                    NodeType::Gateway => 0.0,
-                    NodeType::Constrained => 0.0,
+                    NodeType::Gateway => metrics.communication.compromised.gateway,
+                    NodeType::Constrained => metrics.communication.compromised.constrained,
                 }
             }
             NodeStatus::Leaving => {
                 match self.kind {
-                    NodeType::Gateway => 0.0,
-                    NodeType::Constrained => 0.0,
+                    NodeType::Gateway => metrics.communication.leaving.gateway,
+                    NodeType::Constrained => metrics.communication.leaving.constrained,
                 }
             }
             NodeStatus::Draining => {
                 match self.kind {
-                    NodeType::Gateway => 0.0,
-                    NodeType::Constrained => 0.0,
+                    NodeType::Gateway => metrics.communication.draining.gateway,
+                    NodeType::Constrained => metrics.communication.draining.constrained,
                 }
             }
         }
