@@ -1,0 +1,15 @@
+[package]
+name = "iot_metric_simulation"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "iot_metrics_simulation"
+path = "src/main.rs"
+
+[lib]
+name = "iot_metrics_simulation"
+path = "src/lib.rs"
+
+[dependencies]
+rand = "0.8.4"
