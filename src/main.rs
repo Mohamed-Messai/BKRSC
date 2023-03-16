@@ -1,7 +1,13 @@
+use std::env;
+
+use dotenv::dotenv;
 // use NodesVec from lib.rs
-use iot_metrics_simulation::{MetricsFor, NodesVec, NodeStatus, initialize_network, TotalEnergyConsumption, TotalCommunicationOverhead, MetricsType, EnergyType, CommunicationType};
+use iot_metrics_simulation::{MetricsFor, NodesVec, NodeStatus, initialize_network, TotalEnergyConsumption, TotalCommunicationOverhead, MetricsType, EnergyType, CommunicationType, StateCostType, EnergyConsumptionType, ExchangeType, ExchangeCostType, CommunicationOverheadType, methods::bkrsc::get_metrics};
 
 fn main() {
+    dotenv().ok();
+    let key: i32 = env::var("key").unwrap_or(0.to_string()).parse::<i32>().unwrap();
+    println!("Key: {}", key);
     let mut vec:NodesVec = initialize_network(100, 10, 10, 15);
     for i in 0..vec.len() {
         println!("{:?}", vec[i]);
@@ -18,7 +24,7 @@ fn main() {
         println!("Compromised node id: {}", node.id);
     }
 
-    let metrics: MetricsType = MetricsType::new(EnergyType::new(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0), CommunicationType::new(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
+    let metrics = get_metrics(100, 10, 10);
 
     println!("Total energy consumption: {}", vec.total_energy_consumption(NodeStatus::Compromised, MetricsFor::Constrained, metrics));
     println!("Total communication overhead: {}", vec.total_communication_overhead(NodeStatus::Compromised, MetricsFor::Constrained, metrics));
