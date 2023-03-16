@@ -12,4 +12,6 @@ name = "iot_metrics_simulation"
 path = "src/lib.rs"
 
 [dependencies]
+dotenv = "0.15.0"
+lazy_static = "1.4.0"
 rand = "0.8.4"
