@@ -18,7 +18,7 @@ fn main() {
         println!("Compromised node id: {}", node.id);
     }
 
-    let metrics: MetricsType = MetricsType::new(EnergyType::new(0.0, 0.0, 0.0, 0.0, 0.0, 0.0), CommunicationType::new(0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
+    let metrics: MetricsType = MetricsType::new(EnergyType::new(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0), CommunicationType::new(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
 
     println!("Total energy consumption: {}", vec.total_energy_consumption(NodeStatus::Compromised, MetricsFor::Constrained, metrics));
     println!("Total communication overhead: {}", vec.total_communication_overhead(NodeStatus::Compromised, MetricsFor::Constrained, metrics));

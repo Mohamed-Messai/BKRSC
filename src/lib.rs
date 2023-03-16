@@ -12,12 +12,14 @@ pub enum NodeType {
 pub struct EnergyConsumptionType {
     pub constrained: f32,
     pub gateway: f32,
+    pub left: f32,
 }
 
 #[derive(Debug, PartialEq, Clone, Copy)]
 pub struct CommunicationOverheadType {
     pub constrained: f32,
     pub gateway: f32,
+    pub left: f32,
 }
 
 #[derive(Debug, PartialEq, Clone, Copy)]
@@ -41,21 +43,23 @@ pub struct MetricsType {
 }
 
 impl EnergyType {
-    pub fn new(compromised_constrained: f32, compromised_gateway: f32, leaving_constrained: f32, leaving_gateway: f32, draining_constrained: f32, draining_gateway: f32) -> Self {
+    pub fn new(compromised_constrained: f32, compromised_gateway: f32, leaving_constrained: f32, leaving_gateway: f32, draining_constrained: f32, draining_gateway: f32,
+    compromised_left: f32, leaving_left: f32, draining_left: f32) -> Self {
         Self {
-            compromised: EnergyConsumptionType { constrained: compromised_constrained, gateway: compromised_gateway },
-            leaving: EnergyConsumptionType { constrained: leaving_constrained, gateway: leaving_gateway },
-            draining: EnergyConsumptionType { constrained: draining_constrained, gateway: draining_gateway },
+            compromised: EnergyConsumptionType { constrained: compromised_constrained, gateway: compromised_gateway, left: compromised_left },
+            leaving: EnergyConsumptionType { constrained: leaving_constrained, gateway: leaving_gateway, left: leaving_left },
+            draining: EnergyConsumptionType { constrained: draining_constrained, gateway: draining_gateway, left: draining_left },
         }
     }
 }
 
 impl CommunicationType {
-    pub fn new(compromised_constrained: f32, compromised_gateway: f32, leaving_constrained: f32, leaving_gateway: f32, draining_constrained: f32, draining_gateway: f32) -> Self {
+    pub fn new(compromised_constrained: f32, compromised_gateway: f32, leaving_constrained: f32, leaving_gateway: f32, draining_constrained: f32, draining_gateway: f32,
+    compromised_left: f32, leaving_left: f32, draining_left: f32) -> Self {
         Self {
-            compromised: CommunicationOverheadType { constrained: compromised_constrained, gateway: compromised_gateway },
-            leaving: CommunicationOverheadType { constrained: leaving_constrained, gateway: leaving_gateway },
-            draining: CommunicationOverheadType { constrained: draining_constrained, gateway: draining_gateway },
+            compromised: CommunicationOverheadType { constrained: compromised_constrained, gateway: compromised_gateway, left: compromised_left },
+            leaving: CommunicationOverheadType { constrained: leaving_constrained, gateway: leaving_gateway, left: leaving_left },
+            draining: CommunicationOverheadType { constrained: draining_constrained, gateway: draining_gateway, left: draining_left },
         }
     }
 }
