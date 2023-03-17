@@ -40,6 +40,7 @@ pub struct ExchangeCostType {
 pub struct StateCostType {
     pub exchange: ExchangeType,
     pub exchange_cost: ExchangeCostType,
+    pub number_of_involved_devices: u32
 }
 
 #[derive(Debug, PartialEq, Clone, Copy)]
@@ -76,6 +77,15 @@ impl EnergyType {
         draining_received: u32,
         draining_sent_cost: f32,
         draining_received_cost: f32,
+        cc_involved_devices: u32,
+        cg_involved_devices: u32,
+        cl_involved_devices: u32,
+        lc_involved_devices: u32,
+        lg_involved_devices: u32,
+        ll_involved_devices: u32,
+        dc_involved_devices: u32,
+        dg_involved_devices: u32,
+        dl_involved_devices: u32,
     ) -> Self {
         Self {
             compromised: EnergyConsumptionType {
@@ -88,6 +98,7 @@ impl EnergyType {
                         sent: compromised_sent_cost,
                         received: compromised_received_cost,
                     },
+                    number_of_involved_devices: cc_involved_devices,
                 },
                 gateway: StateCostType {
                     exchange: ExchangeType {
@@ -98,6 +109,7 @@ impl EnergyType {
                         sent: compromised_sent_cost,
                         received: compromised_received_cost,
                     },
+                    number_of_involved_devices: cg_involved_devices,
                 },
                 left: StateCostType {
                     exchange: ExchangeType {
@@ -108,6 +120,7 @@ impl EnergyType {
                         sent: compromised_sent_cost,
                         received: compromised_received_cost,
                     },
+                    number_of_involved_devices: cl_involved_devices,
                 },
             },
             leaving: EnergyConsumptionType {
@@ -120,6 +133,7 @@ impl EnergyType {
                         sent: leaving_sent_cost,
                         received: leaving_received_cost,
                     },
+                    number_of_involved_devices: lc_involved_devices,
                 },
                 gateway: StateCostType {
                     exchange: ExchangeType {
@@ -130,6 +144,7 @@ impl EnergyType {
                         sent: leaving_sent_cost,
                         received: leaving_received_cost,
                     },
+                    number_of_involved_devices: lg_involved_devices,
                 },
                 left: StateCostType {
                     exchange: ExchangeType {
@@ -140,6 +155,7 @@ impl EnergyType {
                         sent: leaving_sent_cost,
                         received: leaving_received_cost,
                     },
+                    number_of_involved_devices: ll_involved_devices,
                 },
             },
             draining: EnergyConsumptionType {
@@ -152,6 +168,7 @@ impl EnergyType {
                         sent: draining_sent_cost,
                         received: draining_received_cost,
                     },
+                    number_of_involved_devices: dc_involved_devices,
                 },
                 gateway: StateCostType {
                     exchange: ExchangeType {
@@ -162,6 +179,7 @@ impl EnergyType {
                         sent: draining_sent_cost,
                         received: draining_received_cost,
                     },
+                    number_of_involved_devices: dg_involved_devices,
                 },
                 left: StateCostType {
                     exchange: ExchangeType {
@@ -172,6 +190,7 @@ impl EnergyType {
                         sent: draining_sent_cost,
                         received: draining_received_cost,
                     },
+                    number_of_involved_devices: dl_involved_devices,
                 },
             },
         }
@@ -192,6 +211,15 @@ impl CommunicationType {
         draining_received: u32,
         draining_sent_cost: f32,
         draining_received_cost: f32,
+        cc_involved_devices: u32,
+        cg_involved_devices: u32,
+        cl_involved_devices: u32,
+        lc_involved_devices: u32,
+        lg_involved_devices: u32,
+        ll_involved_devices: u32,
+        dc_involved_devices: u32,
+        dg_involved_devices: u32,
+        dl_involved_devices: u32,
     ) -> Self {
         Self {
             compromised: CommunicationOverheadType {
@@ -204,6 +232,7 @@ impl CommunicationType {
                         sent: compromised_sent_cost,
                         received: compromised_received_cost,
                     },
+                    number_of_involved_devices: cc_involved_devices,
                 },
                 gateway: StateCostType {
                     exchange: ExchangeType {
@@ -214,6 +243,7 @@ impl CommunicationType {
                         sent: compromised_sent_cost,
                         received: compromised_received_cost,
                     },
+                    number_of_involved_devices: cg_involved_devices,
                 },
                 left: StateCostType {
                     exchange: ExchangeType {
@@ -224,6 +254,7 @@ impl CommunicationType {
                         sent: compromised_sent_cost,
                         received: compromised_received_cost,
                     },
+                    number_of_involved_devices: cl_involved_devices,
                 },
             },
             leaving: CommunicationOverheadType {
@@ -236,6 +267,7 @@ impl CommunicationType {
                         sent: leaving_sent_cost,
                         received: leaving_received_cost,
                     },
+                    number_of_involved_devices: lc_involved_devices,
                 },
                 gateway: StateCostType {
                     exchange: ExchangeType {
@@ -246,6 +278,7 @@ impl CommunicationType {
                         sent: leaving_sent_cost,
                         received: leaving_received_cost,
                     },
+                    number_of_involved_devices: lg_involved_devices,
                 },
                 left: StateCostType {
                     exchange: ExchangeType {
@@ -256,6 +289,7 @@ impl CommunicationType {
                         sent: leaving_sent_cost,
                         received: leaving_received_cost,
                     },
+                    number_of_involved_devices: ll_involved_devices,
                 },
             },
             draining: CommunicationOverheadType {
@@ -268,6 +302,7 @@ impl CommunicationType {
                         sent: draining_sent_cost,
                         received: draining_received_cost,
                     },
+                    number_of_involved_devices: dc_involved_devices,
                 },
                 gateway: StateCostType {
                     exchange: ExchangeType {
@@ -278,6 +313,7 @@ impl CommunicationType {
                         sent: draining_sent_cost,
                         received: draining_received_cost,
                     },
+                    number_of_involved_devices: dg_involved_devices,
                 },
                 left: StateCostType {
                     exchange: ExchangeType {
@@ -288,6 +324,7 @@ impl CommunicationType {
                         sent: draining_sent_cost,
                         received: draining_received_cost,
                     },
+                    number_of_involved_devices: dl_involved_devices,
                 },
             },
         }
