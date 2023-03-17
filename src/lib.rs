@@ -379,7 +379,7 @@ pub trait TotalEnergyConsumption<M> {
         &self,
         status: NodeStatus,
         metrics_for: MetricsFor,
-        metrics: M,
+        metrics: M
     ) -> f32;
 }
 
@@ -388,7 +388,7 @@ pub trait TotalCommunicationOverhead<M> {
         &self,
         status: NodeStatus,
         metrics_for: MetricsFor,
-        metrics: M,
+        metrics: M
     ) -> f32;
 }
 
@@ -398,15 +398,52 @@ impl TotalEnergyConsumption<MetricsType> for NodesVec {
         &self,
         status: NodeStatus,
         metrics_for: MetricsFor,
-        metrics: MetricsType,
+        metrics: MetricsType
     ) -> f32 {
         let mut total_energy_consumption = 0.0;
         let filtered_nodes: _ = match metrics_for {
             MetricsFor::Constrained => {
-                let constrained_nodes: Vec<&Node> = self
+                let constrained_nodes: Vec<&Node> = match status {
+                    NodeStatus::Compromised => self
+                        .iter()
+                        .filter(|node| node.kind == NodeType::Constrained)
+                        .filter(|node| node.is_compromised == true)
+                        .filter(|node| node.is_leaving == false)
+                        .filter(|node| node.is_draining == false)
+                        .clone()
+                        .collect(),
+                    NodeStatus::Leaving => self
+                        .iter()
+                        .filter(|node| node.kind == NodeType::Constrained)
+                        .filter(|node| node.is_compromised == false)
+                        .filter(|node| node.is_leaving == true)
+                        .filter(|node| node.is_draining == false)
+                        .clone()
+                        .collect(),
+                    NodeStatus::Draining => self
+                        .iter()
+                        .filter(|node| node.kind == NodeType::Constrained)
+                        .filter(|node| node.is_compromised == false)
+                        .filter(|node| node.is_leaving == false)
+                        .filter(|node| node.is_draining == true)
+                        .clone()
+                        .collect(),
+                };
+                // Add the constrained neighbors of constrained nodes to the constrained nodes withou duplicates
+                // The check for duplicates is done by checking if the node id is already in the constrained_nodes vector
+                let constrained_nodes: Vec<&Node> = constrained_nodes
                     .iter()
-                    .filter(|node| node.kind == NodeType::Constrained)
-                    .clone()
+                    .map(|node| {
+                        let mut neighbors: Vec<&Node> = node
+                            .neighbors
+                            .iter()
+                            .map(|id| self.get(*id).unwrap())
+                            .filter(|node| node.kind == NodeType::Constrained)
+                            .collect();
+                        neighbors.push(node);
+                        neighbors
+                    })
+                    .flatten()
                     .collect();
                 constrained_nodes
             }
@@ -436,15 +473,52 @@ impl TotalCommunicationOverhead<MetricsType> for NodesVec {
         &self,
         status: NodeStatus,
         metrics_for: MetricsFor,
-        metrics: MetricsType,
+        metrics: MetricsType
     ) -> f32 {
         let mut total_communication_overhead = 0.0;
         let filtered_nodes: _ = match metrics_for {
             MetricsFor::Constrained => {
-                let constrained_nodes: Vec<&Node> = self
+                let constrained_nodes: Vec<&Node> = match status {
+                    NodeStatus::Compromised => self
+                        .iter()
+                        .filter(|node| node.kind == NodeType::Constrained)
+                        .filter(|node| node.is_compromised == true)
+                        .filter(|node| node.is_leaving == false)
+                        .filter(|node| node.is_draining == false)
+                        .clone()
+                        .collect(),
+                    NodeStatus::Leaving => self
+                        .iter()
+                        .filter(|node| node.kind == NodeType::Constrained)
+                        .filter(|node| node.is_compromised == false)
+                        .filter(|node| node.is_leaving == true)
+                        .filter(|node| node.is_draining == false)
+                        .clone()
+                        .collect(),
+                    NodeStatus::Draining => self
+                        .iter()
+                        .filter(|node| node.kind == NodeType::Constrained)
+                        .filter(|node| node.is_compromised == false)
+                        .filter(|node| node.is_leaving == false)
+                        .filter(|node| node.is_draining == true)
+                        .clone()
+                        .collect(),
+                };
+                // Add the constrained neighbors of constrained nodes to the constrained nodes withou duplicates
+                // The check for duplicates is done by checking if the node id is already in the constrained_nodes vector
+                let constrained_nodes: Vec<&Node> = constrained_nodes
                     .iter()
-                    .filter(|node| node.kind == NodeType::Constrained)
-                    .clone()
+                    .map(|node| {
+                        let mut neighbors: Vec<&Node> = node
+                            .neighbors
+                            .iter()
+                            .map(|id| self.get(*id).unwrap())
+                            .filter(|node| node.kind == NodeType::Constrained)
+                            .collect();
+                        neighbors.push(node);
+                        neighbors
+                    })
+                    .flatten()
                     .collect();
                 constrained_nodes
             }
