@@ -10,6 +10,14 @@ pub enum NodeType {
     Constrained,
 }
 
+#[derive(Debug, PartialEq, Eq, Clone, Copy)]
+pub enum InvolvedDevicesCount {
+    Neighbors,
+    GatewayMembers,
+    All,
+    SameAsDefined,
+}
+
 #[derive(Debug, PartialEq, Clone, Copy)]
 pub struct EnergyConsumptionType {
     pub constrained: StateCostType,
@@ -40,7 +48,8 @@ pub struct ExchangeCostType {
 pub struct StateCostType {
     pub exchange: ExchangeType,
     pub exchange_cost: ExchangeCostType,
-    pub number_of_involved_devices: u32
+    pub number_of_involved_devices: u32,
+    pub involved_devices: InvolvedDevicesCount,
 }
 
 #[derive(Debug, PartialEq, Clone, Copy)]
@@ -86,6 +95,15 @@ impl EnergyType {
         dc_involved_devices: u32,
         dg_involved_devices: u32,
         dl_involved_devices: u32,
+        cc_involved_devices_t: InvolvedDevicesCount,
+        cg_involved_devices_t: InvolvedDevicesCount,
+        cl_involved_devices_t: InvolvedDevicesCount,
+        lc_involved_devices_t: InvolvedDevicesCount,
+        lg_involved_devices_t: InvolvedDevicesCount,
+        ll_involved_devices_t: InvolvedDevicesCount,
+        dc_involved_devices_t: InvolvedDevicesCount,
+        dg_involved_devices_t: InvolvedDevicesCount,
+        dl_involved_devices_t: InvolvedDevicesCount,
     ) -> Self {
         Self {
             compromised: EnergyConsumptionType {
@@ -99,6 +117,7 @@ impl EnergyType {
                         received: compromised_received_cost,
                     },
                     number_of_involved_devices: cc_involved_devices,
+                    involved_devices: cc_involved_devices_t,
                 },
                 gateway: StateCostType {
                     exchange: ExchangeType {
@@ -110,6 +129,7 @@ impl EnergyType {
                         received: compromised_received_cost,
                     },
                     number_of_involved_devices: cg_involved_devices,
+                    involved_devices: cg_involved_devices_t,
                 },
                 left: StateCostType {
                     exchange: ExchangeType {
@@ -121,6 +141,7 @@ impl EnergyType {
                         received: compromised_received_cost,
                     },
                     number_of_involved_devices: cl_involved_devices,
+                    involved_devices: cl_involved_devices_t,
                 },
             },
             leaving: EnergyConsumptionType {
@@ -134,6 +155,7 @@ impl EnergyType {
                         received: leaving_received_cost,
                     },
                     number_of_involved_devices: lc_involved_devices,
+                    involved_devices: lc_involved_devices_t,
                 },
                 gateway: StateCostType {
                     exchange: ExchangeType {
@@ -145,6 +167,7 @@ impl EnergyType {
                         received: leaving_received_cost,
                     },
                     number_of_involved_devices: lg_involved_devices,
+                    involved_devices: lg_involved_devices_t,
                 },
                 left: StateCostType {
                     exchange: ExchangeType {
@@ -156,6 +179,7 @@ impl EnergyType {
                         received: leaving_received_cost,
                     },
                     number_of_involved_devices: ll_involved_devices,
+                    involved_devices: ll_involved_devices_t,
                 },
             },
             draining: EnergyConsumptionType {
@@ -169,6 +193,7 @@ impl EnergyType {
                         received: draining_received_cost,
                     },
                     number_of_involved_devices: dc_involved_devices,
+                    involved_devices: dc_involved_devices_t,
                 },
                 gateway: StateCostType {
                     exchange: ExchangeType {
@@ -180,6 +205,7 @@ impl EnergyType {
                         received: draining_received_cost,
                     },
                     number_of_involved_devices: dg_involved_devices,
+                    involved_devices: dg_involved_devices_t,
                 },
                 left: StateCostType {
                     exchange: ExchangeType {
@@ -191,6 +217,7 @@ impl EnergyType {
                         received: draining_received_cost,
                     },
                     number_of_involved_devices: dl_involved_devices,
+                    involved_devices: dl_involved_devices_t,
                 },
             },
         }
@@ -220,6 +247,15 @@ impl CommunicationType {
         dc_involved_devices: u32,
         dg_involved_devices: u32,
         dl_involved_devices: u32,
+        cc_involved_devices_t: InvolvedDevicesCount,
+        cg_involved_devices_t: InvolvedDevicesCount,
+        cl_involved_devices_t: InvolvedDevicesCount,
+        lc_involved_devices_t: InvolvedDevicesCount,
+        lg_involved_devices_t: InvolvedDevicesCount,
+        ll_involved_devices_t: InvolvedDevicesCount,
+        dc_involved_devices_t: InvolvedDevicesCount,
+        dg_involved_devices_t: InvolvedDevicesCount,
+        dl_involved_devices_t: InvolvedDevicesCount,
     ) -> Self {
         Self {
             compromised: CommunicationOverheadType {
@@ -233,6 +269,7 @@ impl CommunicationType {
                         received: compromised_received_cost,
                     },
                     number_of_involved_devices: cc_involved_devices,
+                    involved_devices: cc_involved_devices_t,
                 },
                 gateway: StateCostType {
                     exchange: ExchangeType {
@@ -244,6 +281,7 @@ impl CommunicationType {
                         received: compromised_received_cost,
                     },
                     number_of_involved_devices: cg_involved_devices,
+                    involved_devices: cg_involved_devices_t,
                 },
                 left: StateCostType {
                     exchange: ExchangeType {
@@ -255,6 +293,7 @@ impl CommunicationType {
                         received: compromised_received_cost,
                     },
                     number_of_involved_devices: cl_involved_devices,
+                    involved_devices: cl_involved_devices_t,
                 },
             },
             leaving: CommunicationOverheadType {
@@ -268,6 +307,7 @@ impl CommunicationType {
                         received: leaving_received_cost,
                     },
                     number_of_involved_devices: lc_involved_devices,
+                    involved_devices: lc_involved_devices_t,
                 },
                 gateway: StateCostType {
                     exchange: ExchangeType {
@@ -279,6 +319,7 @@ impl CommunicationType {
                         received: leaving_received_cost,
                     },
                     number_of_involved_devices: lg_involved_devices,
+                    involved_devices: lg_involved_devices_t,
                 },
                 left: StateCostType {
                     exchange: ExchangeType {
@@ -290,6 +331,7 @@ impl CommunicationType {
                         received: leaving_received_cost,
                     },
                     number_of_involved_devices: ll_involved_devices,
+                    involved_devices: ll_involved_devices_t,
                 },
             },
             draining: CommunicationOverheadType {
@@ -303,6 +345,7 @@ impl CommunicationType {
                         received: draining_received_cost,
                     },
                     number_of_involved_devices: dc_involved_devices,
+                    involved_devices: dc_involved_devices_t,
                 },
                 gateway: StateCostType {
                     exchange: ExchangeType {
@@ -314,6 +357,7 @@ impl CommunicationType {
                         received: draining_received_cost,
                     },
                     number_of_involved_devices: dg_involved_devices,
+                    involved_devices: dg_involved_devices_t,
                 },
                 left: StateCostType {
                     exchange: ExchangeType {
@@ -325,6 +369,7 @@ impl CommunicationType {
                         received: draining_received_cost,
                     },
                     number_of_involved_devices: dl_involved_devices,
+                    involved_devices: dl_involved_devices_t,
                 },
             },
         }
@@ -401,68 +446,139 @@ impl TotalEnergyConsumption<MetricsType> for NodesVec {
         metrics: MetricsType
     ) -> f32 {
         let mut total_energy_consumption = 0.0;
+        let mut involved_devices = 0;
         let filtered_nodes: _ = match metrics_for {
             MetricsFor::Constrained => {
                 let constrained_nodes: Vec<&Node> = match status {
-                    NodeStatus::Compromised => self
+                    NodeStatus::Compromised => {
+                        let devices = self
                         .iter()
                         .filter(|node| node.kind == NodeType::Constrained)
                         .filter(|node| node.is_compromised == true)
                         .filter(|node| node.is_leaving == false)
                         .filter(|node| node.is_draining == false)
                         .clone()
-                        .collect(),
-                    NodeStatus::Leaving => self
+                        .collect();
+
+
+                        involved_devices = match metrics.energy.compromised.constrained.involved_devices {
+                            InvolvedDevicesCount::All => self.len() as u32,
+                            InvolvedDevicesCount::SameAsDefined | InvolvedDevicesCount::GatewayMembers => metrics.energy.compromised.constrained.number_of_involved_devices,
+                            InvolvedDevicesCount::Neighbors => {
+                                // Count devices and their neighbors
+                                let mut devices = 0;
+                                for node in self.iter() {
+                                    if node.kind == NodeType::Constrained && node.is_compromised == true {
+                                        devices += 1;
+                                        devices += node.neighbors.len();
+                                    }
+                                }
+                                devices as u32
+                            }
+                        };
+
+                        devices
+                    },
+                    NodeStatus::Leaving => {
+                        let devices = self
                         .iter()
                         .filter(|node| node.kind == NodeType::Constrained)
                         .filter(|node| node.is_compromised == false)
                         .filter(|node| node.is_leaving == true)
                         .filter(|node| node.is_draining == false)
                         .clone()
-                        .collect(),
-                    NodeStatus::Draining => self
+                        .collect();
+
+                        involved_devices = match metrics.energy.leaving.constrained.involved_devices {
+                            InvolvedDevicesCount::All => self.len() as u32,
+                            InvolvedDevicesCount::SameAsDefined | InvolvedDevicesCount::GatewayMembers => metrics.energy.leaving.constrained.number_of_involved_devices,
+                            InvolvedDevicesCount::Neighbors => {
+                                // Count devices and their neighbors
+                                let mut devices = 0;
+                                for node in self.iter() {
+                                    if node.kind == NodeType::Constrained && node.is_leaving == true {
+                                        devices += 1;
+                                        devices += node.neighbors.len();
+                                    }
+                                }
+                                devices as u32
+                            }
+                        };
+
+                        devices
+                    },
+                    NodeStatus::Draining => {
+                        let devices = self
                         .iter()
                         .filter(|node| node.kind == NodeType::Constrained)
                         .filter(|node| node.is_compromised == false)
                         .filter(|node| node.is_leaving == false)
                         .filter(|node| node.is_draining == true)
                         .clone()
-                        .collect(),
+                        .collect();
+
+                        involved_devices = match metrics.energy.draining.constrained.involved_devices {
+                            InvolvedDevicesCount::All => self.len() as u32,
+                            InvolvedDevicesCount::SameAsDefined | InvolvedDevicesCount::GatewayMembers => metrics.energy.draining.constrained.number_of_involved_devices,
+                            InvolvedDevicesCount::Neighbors => {
+                                // Count devices and their neighbors
+                                let mut devices = 0;
+                                for node in self.iter() {
+                                    if node.kind == NodeType::Constrained && node.is_draining == true {
+                                        devices += 1;
+                                        devices += node.neighbors.len();
+                                    }
+                                }
+                                devices as u32
+                            }
+                        };
+
+                        devices
+                    }
                 };
-                // Add the constrained neighbors of constrained nodes to the constrained nodes withou duplicates
-                // The check for duplicates is done by checking if the node id is already in the constrained_nodes vector
-                let constrained_nodes: Vec<&Node> = constrained_nodes
-                    .iter()
-                    .map(|node| {
-                        let mut neighbors: Vec<&Node> = node
-                            .neighbors
-                            .iter()
-                            .map(|id| self.get(*id).unwrap())
-                            .filter(|node| node.kind == NodeType::Constrained)
-                            .collect();
-                        neighbors.push(node);
-                        neighbors
-                    })
-                    .flatten()
-                    .collect();
                 constrained_nodes
             }
-            MetricsFor::Gateway => self
+            MetricsFor::Gateway => {
+                let devices = self
                 .iter()
                 .filter(|node| node.kind == NodeType::Gateway)
                 .clone()
-                .collect(),
-            MetricsFor::All => self.iter().collect(),
+                .collect();
+
+                involved_devices = match metrics.energy.compromised.gateway.involved_devices {
+                    InvolvedDevicesCount::All => self.len() as u32,
+                    InvolvedDevicesCount::SameAsDefined | InvolvedDevicesCount::GatewayMembers => metrics.energy.compromised.gateway.number_of_involved_devices,
+                    InvolvedDevicesCount::Neighbors => {
+                        // Count devices and their neighbors
+                        let mut devices = 0;
+                        for node in self.iter() {
+                            if node.kind == NodeType::Constrained && node.is_compromised == true {
+                                devices += 1;
+                                devices += node.neighbors.len();
+                            }
+                        }
+                        devices as u32
+                    }
+                };
+
+                devices
+            }
+            MetricsFor::All => {
+                let devices = self.iter().collect();
+
+                involved_devices = 0; // TODO: Not covered yet
+
+                devices
+            }
         };
         for node in filtered_nodes.iter() {
             if metrics_for == MetricsFor::Constrained && node.kind == NodeType::Constrained {
-                total_energy_consumption += node.energy_consumption(status, metrics);
+                total_energy_consumption += node.energy_consumption(status, metrics) * involved_devices as f32;
             } else if metrics_for == MetricsFor::Gateway && node.kind == NodeType::Gateway {
-                total_energy_consumption += node.energy_consumption(status, metrics);
+                total_energy_consumption += node.energy_consumption(status, metrics) * involved_devices as f32;
             } else if metrics_for == MetricsFor::All {
-                total_energy_consumption += node.energy_consumption(status, metrics);
+                total_energy_consumption += node.energy_consumption(status, metrics) * involved_devices as f32;
             }
-            total_energy_consumption += node.energy_consumption(status, metrics);
         }
         total_energy_consumption
     }
@@ -476,68 +592,138 @@ impl TotalCommunicationOverhead<MetricsType> for NodesVec {
         metrics: MetricsType
     ) -> f32 {
         let mut total_communication_overhead = 0.0;
+        let mut involved_devices = 0;
         let filtered_nodes: _ = match metrics_for {
             MetricsFor::Constrained => {
                 let constrained_nodes: Vec<&Node> = match status {
-                    NodeStatus::Compromised => self
+                    NodeStatus::Compromised => {
+                        let devices = self
                         .iter()
                         .filter(|node| node.kind == NodeType::Constrained)
                         .filter(|node| node.is_compromised == true)
                         .filter(|node| node.is_leaving == false)
                         .filter(|node| node.is_draining == false)
                         .clone()
-                        .collect(),
-                    NodeStatus::Leaving => self
+                        .collect();
+
+                        involved_devices = match metrics.communication.compromised.constrained.involved_devices {
+                            InvolvedDevicesCount::All => self.len() as u32,
+                            InvolvedDevicesCount::SameAsDefined | InvolvedDevicesCount::GatewayMembers => metrics.communication.compromised.constrained.number_of_involved_devices,
+                            InvolvedDevicesCount::Neighbors => {
+                                // Count devices and their neighbors
+                                let mut devices = 0;
+                                for node in self.iter() {
+                                    if node.kind == NodeType::Constrained && node.is_compromised == true {
+                                        devices += 1;
+                                        devices += node.neighbors.len();
+                                    }
+                                }
+                                devices as u32
+                            }
+                        };
+
+                        devices
+                    }
+                    NodeStatus::Leaving => {
+                        let devices = self
                         .iter()
                         .filter(|node| node.kind == NodeType::Constrained)
                         .filter(|node| node.is_compromised == false)
                         .filter(|node| node.is_leaving == true)
                         .filter(|node| node.is_draining == false)
                         .clone()
-                        .collect(),
-                    NodeStatus::Draining => self
+                        .collect();
+
+                        involved_devices = match metrics.communication.leaving.constrained.involved_devices {
+                            InvolvedDevicesCount::All => self.len() as u32,
+                            InvolvedDevicesCount::SameAsDefined | InvolvedDevicesCount::GatewayMembers => metrics.communication.leaving.constrained.number_of_involved_devices,
+                            InvolvedDevicesCount::Neighbors => {
+                                // Count devices and their neighbors
+                                let mut devices = 0;
+                                for node in self.iter() {
+                                    if node.kind == NodeType::Constrained && node.is_leaving == true {
+                                        devices += 1;
+                                        devices += node.neighbors.len();
+                                    }
+                                }
+                                devices as u32
+                            }
+                        };
+
+                        devices
+                    }
+                    NodeStatus::Draining => {
+                        let devices = self
                         .iter()
                         .filter(|node| node.kind == NodeType::Constrained)
                         .filter(|node| node.is_compromised == false)
                         .filter(|node| node.is_leaving == false)
                         .filter(|node| node.is_draining == true)
                         .clone()
-                        .collect(),
+                        .collect();
+
+                        involved_devices = match metrics.communication.draining.constrained.involved_devices {
+                            InvolvedDevicesCount::All => self.len() as u32,
+                            InvolvedDevicesCount::SameAsDefined | InvolvedDevicesCount::GatewayMembers => metrics.communication.draining.constrained.number_of_involved_devices,
+                            InvolvedDevicesCount::Neighbors => {
+                                // Count devices and their neighbors
+                                let mut devices = 0;
+                                for node in self.iter() {
+                                    if node.kind == NodeType::Constrained && node.is_draining == true {
+                                        devices += 1;
+                                        devices += node.neighbors.len();
+                                    }
+                                }
+                                devices as u32
+                            }
+                        };
+
+                        devices
+                    }
                 };
-                // Add the constrained neighbors of constrained nodes to the constrained nodes withou duplicates
-                // The check for duplicates is done by checking if the node id is already in the constrained_nodes vector
-                let constrained_nodes: Vec<&Node> = constrained_nodes
-                    .iter()
-                    .map(|node| {
-                        let mut neighbors: Vec<&Node> = node
-                            .neighbors
-                            .iter()
-                            .map(|id| self.get(*id).unwrap())
-                            .filter(|node| node.kind == NodeType::Constrained)
-                            .collect();
-                        neighbors.push(node);
-                        neighbors
-                    })
-                    .flatten()
-                    .collect();
                 constrained_nodes
             }
-            MetricsFor::Gateway => self
+            MetricsFor::Gateway => {
+                let devices = self
                 .iter()
                 .filter(|node| node.kind == NodeType::Gateway)
                 .clone()
-                .collect(),
-            MetricsFor::All => self.iter().collect(),
+                .collect();
+
+                involved_devices = match metrics.communication.compromised.gateway.involved_devices {
+                    InvolvedDevicesCount::All => self.len() as u32,
+                    InvolvedDevicesCount::SameAsDefined | InvolvedDevicesCount::GatewayMembers => metrics.communication.compromised.gateway.number_of_involved_devices,
+                    InvolvedDevicesCount::Neighbors => {
+                        // Count devices and their neighbors
+                        let mut devices = 0;
+                        for node in self.iter() {
+                            if node.kind == NodeType::Gateway {
+                                devices += 1;
+                                devices += node.neighbors.len();
+                            }
+                        }
+                        devices as u32
+                    }
+                };
+
+                devices
+            }
+            MetricsFor::All => {
+                let devices = self.iter().collect();
+
+                involved_devices = 0;
+
+                devices
+            }
         };
         for node in filtered_nodes.iter() {
             if metrics_for == MetricsFor::Constrained && node.kind == NodeType::Constrained {
-                total_communication_overhead += node.communication_overhead(status, metrics);
+                total_communication_overhead += node.communication_overhead(status, metrics) * involved_devices as f32;
             } else if metrics_for == MetricsFor::Gateway && node.kind == NodeType::Gateway {
-                total_communication_overhead += node.communication_overhead(status, metrics);
+                total_communication_overhead += node.communication_overhead(status, metrics) * involved_devices as f32;
             } else if metrics_for == MetricsFor::All {
-                total_communication_overhead += node.communication_overhead(status, metrics);
+                total_communication_overhead += node.communication_overhead(status, metrics) * involved_devices as f32;
             }
-            total_communication_overhead += node.communication_overhead(status, metrics);
         }
         total_communication_overhead
     }

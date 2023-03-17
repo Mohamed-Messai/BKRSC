@@ -4,7 +4,7 @@ use lazy_static::lazy_static;
 
 use crate::{
     CommunicationOverheadType, CommunicationType, EnergyConsumptionType, EnergyType,
-    ExchangeCostType, ExchangeType, MetricsType, StateCostType,
+    ExchangeCostType, ExchangeType, MetricsType, StateCostType, InvolvedDevicesCount,
 };
 
 lazy_static! {
@@ -44,6 +44,7 @@ pub fn get_metrics(
                         received: *EPRB,
                     },
                     number_of_involved_devices: number_of_gateway_members,
+                    involved_devices: InvolvedDevicesCount::GatewayMembers,
                 },
                 gateway: StateCostType {
                     exchange: ExchangeType {
@@ -55,6 +56,7 @@ pub fn get_metrics(
                         received: 0f32,
                     },
                     number_of_involved_devices: 1,
+                    involved_devices: InvolvedDevicesCount::SameAsDefined,
                 },
                 left: StateCostType {
                     exchange: ExchangeType {
@@ -66,6 +68,7 @@ pub fn get_metrics(
                         received: *EPRB,
                     },
                     number_of_involved_devices: 0,
+                    involved_devices: InvolvedDevicesCount::SameAsDefined,
                 },
             },
             draining: EnergyConsumptionType {
@@ -79,6 +82,7 @@ pub fn get_metrics(
                         received: *EPRB,
                     },
                     number_of_involved_devices: number_of_gateway_members,
+                    involved_devices: InvolvedDevicesCount::GatewayMembers,
                 },
                 gateway: StateCostType {
                     exchange: ExchangeType {
@@ -90,6 +94,7 @@ pub fn get_metrics(
                         received: 0f32,
                     },
                     number_of_involved_devices: 1,
+                    involved_devices: InvolvedDevicesCount::SameAsDefined,
                 },
                 left: StateCostType {
                     exchange: ExchangeType {
@@ -101,6 +106,7 @@ pub fn get_metrics(
                         received: *EPRB,
                     },
                     number_of_involved_devices: 0,
+                    involved_devices: InvolvedDevicesCount::SameAsDefined,
                 },
             },
             leaving: EnergyConsumptionType {
@@ -114,6 +120,7 @@ pub fn get_metrics(
                         received: *EPRB,
                     },
                     number_of_involved_devices: number_of_gateway_members,
+                    involved_devices: InvolvedDevicesCount::GatewayMembers,
                 },
                 gateway: StateCostType {
                     exchange: ExchangeType {
@@ -125,6 +132,7 @@ pub fn get_metrics(
                         received: 0f32,
                     },
                     number_of_involved_devices: 1,
+                    involved_devices: InvolvedDevicesCount::SameAsDefined,
                 },
                 left: StateCostType {
                     exchange: ExchangeType {
@@ -136,6 +144,7 @@ pub fn get_metrics(
                         received: *EPRB,
                     },
                     number_of_involved_devices: 0,
+                    involved_devices: InvolvedDevicesCount::SameAsDefined,
                 },
             },
         },
@@ -151,6 +160,7 @@ pub fn get_metrics(
                         received: *RECEIVED_MESSAGE_SIZE as f32,
                     },
                     number_of_involved_devices: number_of_gateway_members,
+                    involved_devices: InvolvedDevicesCount::GatewayMembers,
                 },
                 gateway: StateCostType {
                     exchange: ExchangeType {
@@ -162,6 +172,7 @@ pub fn get_metrics(
                         received: *RECEIVED_MESSAGE_SIZE as f32,
                     },
                     number_of_involved_devices: 1,
+                    involved_devices: InvolvedDevicesCount::SameAsDefined,
                 },
                 left: StateCostType {
                     exchange: ExchangeType {
@@ -173,6 +184,7 @@ pub fn get_metrics(
                         received: *RECEIVED_MESSAGE_SIZE as f32,
                     },
                     number_of_involved_devices: 0,
+                    involved_devices: InvolvedDevicesCount::SameAsDefined,
                 },
             },
             draining: CommunicationOverheadType {
@@ -186,6 +198,7 @@ pub fn get_metrics(
                         received: *RECEIVED_MESSAGE_SIZE as f32,
                     },
                     number_of_involved_devices: number_of_gateway_members,
+                    involved_devices: InvolvedDevicesCount::GatewayMembers,
                 },
                 gateway: StateCostType {
                     exchange: ExchangeType {
@@ -197,6 +210,7 @@ pub fn get_metrics(
                         received: *RECEIVED_MESSAGE_SIZE as f32,
                     },
                     number_of_involved_devices: 1,
+                    involved_devices: InvolvedDevicesCount::SameAsDefined,
                 },
                 left: StateCostType {
                     exchange: ExchangeType {
@@ -208,6 +222,7 @@ pub fn get_metrics(
                         received: *RECEIVED_MESSAGE_SIZE as f32,
                     },
                     number_of_involved_devices: 0,
+                    involved_devices: InvolvedDevicesCount::SameAsDefined,
                 },
             },
             leaving: CommunicationOverheadType {
@@ -221,6 +236,7 @@ pub fn get_metrics(
                         received: *RECEIVED_MESSAGE_SIZE as f32,
                     },
                     number_of_involved_devices: number_of_gateway_members,
+                    involved_devices: InvolvedDevicesCount::GatewayMembers,
                 },
                 gateway: StateCostType {
                     exchange: ExchangeType {
@@ -232,6 +248,7 @@ pub fn get_metrics(
                         received: *RECEIVED_MESSAGE_SIZE as f32,
                     },
                     number_of_involved_devices: 1,
+                    involved_devices: InvolvedDevicesCount::SameAsDefined,
                 },
                 left: StateCostType {
                     exchange: ExchangeType {
@@ -243,6 +260,7 @@ pub fn get_metrics(
                         received: *RECEIVED_MESSAGE_SIZE as f32,
                     },
                     number_of_involved_devices: 0,
+                    involved_devices: InvolvedDevicesCount::SameAsDefined,
                 },
             },
         },
