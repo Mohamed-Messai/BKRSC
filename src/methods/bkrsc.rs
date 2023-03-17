@@ -40,9 +40,10 @@ pub fn get_metrics(
                         received: 1,
                     },
                     exchange_cost: ExchangeCostType {
-                        sent: 0.1,
-                        received: 0.1,
+                        sent: *EPSB,
+                        received: *EPRB,
                     },
+                    number_of_involved_devices: number_of_gateway_members,
                 },
                 gateway: StateCostType {
                     exchange: ExchangeType {
@@ -50,19 +51,21 @@ pub fn get_metrics(
                         received: number_of_nodes,
                     },
                     exchange_cost: ExchangeCostType {
-                        sent: 0.1,
-                        received: 0.1,
+                        sent: 0f32,
+                        received: 0f32,
                     },
+                    number_of_involved_devices: 1,
                 },
                 left: StateCostType {
                     exchange: ExchangeType {
-                        sent: 1,
-                        received: number_of_neighbors + 1,
+                        sent: 0,
+                        received: 0,
                     },
                     exchange_cost: ExchangeCostType {
-                        sent: 0.1,
-                        received: 0.1,
+                        sent: *EPSB,
+                        received: *EPRB,
                     },
+                    number_of_involved_devices: 0,
                 },
             },
             draining: EnergyConsumptionType {
@@ -72,9 +75,10 @@ pub fn get_metrics(
                         received: 1,
                     },
                     exchange_cost: ExchangeCostType {
-                        sent: 0.1,
-                        received: 0.1,
+                        sent: *EPSB,
+                        received: *EPRB,
                     },
+                    number_of_involved_devices: number_of_gateway_members,
                 },
                 gateway: StateCostType {
                     exchange: ExchangeType {
@@ -82,19 +86,21 @@ pub fn get_metrics(
                         received: number_of_gateway_members,
                     },
                     exchange_cost: ExchangeCostType {
-                        sent: 0.1,
-                        received: 0.1,
+                        sent: 0f32,
+                        received: 0f32,
                     },
+                    number_of_involved_devices: 1,
                 },
                 left: StateCostType {
                     exchange: ExchangeType {
-                        sent: 1,
-                        received: 1,
+                        sent: 0,
+                        received: 0,
                     },
                     exchange_cost: ExchangeCostType {
-                        sent: 0.1,
-                        received: 0.1,
+                        sent: *EPSB,
+                        received: *EPRB,
                     },
+                    number_of_involved_devices: 0,
                 },
             },
             leaving: EnergyConsumptionType {
@@ -104,19 +110,21 @@ pub fn get_metrics(
                         received: 1,
                     },
                     exchange_cost: ExchangeCostType {
-                        sent: 0.1,
-                        received: 0.1,
+                        sent: *EPSB,
+                        received: *EPRB,
                     },
+                    number_of_involved_devices: number_of_gateway_members,
                 },
                 gateway: StateCostType {
                     exchange: ExchangeType {
                         sent: 1,
-                        received: 1,
+                        received: number_of_neighbors,
                     },
                     exchange_cost: ExchangeCostType {
-                        sent: 0.1,
-                        received: 0.1,
+                        sent: 0f32,
+                        received: 0f32,
                     },
+                    number_of_involved_devices: 1,
                 },
                 left: StateCostType {
                     exchange: ExchangeType {
@@ -124,9 +132,10 @@ pub fn get_metrics(
                         received: 1,
                     },
                     exchange_cost: ExchangeCostType {
-                        sent: 0.1,
-                        received: 0.1,
+                        sent: *EPSB,
+                        received: *EPRB,
                     },
+                    number_of_involved_devices: 0,
                 },
             },
         },
@@ -138,29 +147,32 @@ pub fn get_metrics(
                         received: 1,
                     },
                     exchange_cost: ExchangeCostType {
-                        sent: 0.1,
-                        received: 0.1,
+                        sent: *SENT_MESSAGE_SIZE as f32,
+                        received: *RECEIVED_MESSAGE_SIZE as f32,
                     },
+                    number_of_involved_devices: number_of_gateway_members,
                 },
                 gateway: StateCostType {
                     exchange: ExchangeType {
                         sent: 1,
-                        received: 1,
+                        received: number_of_nodes,
                     },
                     exchange_cost: ExchangeCostType {
-                        sent: 0.1,
-                        received: 0.1,
+                        sent: *SENT_MESSAGE_SIZE as f32,
+                        received: *RECEIVED_MESSAGE_SIZE as f32,
                     },
+                    number_of_involved_devices: 1,
                 },
                 left: StateCostType {
                     exchange: ExchangeType {
-                        sent: 1,
-                        received: 1,
+                        sent: 0,
+                        received: 0,
                     },
                     exchange_cost: ExchangeCostType {
-                        sent: 0.1,
-                        received: 0.1,
+                        sent: *SENT_MESSAGE_SIZE as f32,
+                        received: *RECEIVED_MESSAGE_SIZE as f32,
                     },
+                    number_of_involved_devices: 0,
                 },
             },
             draining: CommunicationOverheadType {
@@ -170,29 +182,32 @@ pub fn get_metrics(
                         received: 1,
                     },
                     exchange_cost: ExchangeCostType {
-                        sent: 0.1,
-                        received: 0.1,
+                        sent: *SENT_MESSAGE_SIZE as f32,
+                        received: *RECEIVED_MESSAGE_SIZE as f32,
                     },
+                    number_of_involved_devices: number_of_gateway_members,
                 },
                 gateway: StateCostType {
                     exchange: ExchangeType {
                         sent: 1,
-                        received: 1,
+                        received: number_of_gateway_members,
                     },
                     exchange_cost: ExchangeCostType {
-                        sent: 0.1,
-                        received: 0.1,
+                        sent: *SENT_MESSAGE_SIZE as f32,
+                        received: *RECEIVED_MESSAGE_SIZE as f32,
                     },
+                    number_of_involved_devices: 1,
                 },
                 left: StateCostType {
                     exchange: ExchangeType {
-                        sent: 1,
-                        received: 1,
+                        sent: 0,
+                        received: 0,
                     },
                     exchange_cost: ExchangeCostType {
-                        sent: 0.1,
-                        received: 0.1,
+                        sent: *SENT_MESSAGE_SIZE as f32,
+                        received: *RECEIVED_MESSAGE_SIZE as f32,
                     },
+                    number_of_involved_devices: 0,
                 },
             },
             leaving: CommunicationOverheadType {
@@ -202,19 +217,21 @@ pub fn get_metrics(
                         received: 1,
                     },
                     exchange_cost: ExchangeCostType {
-                        sent: 0.1,
-                        received: 0.1,
+                        sent: *SENT_MESSAGE_SIZE as f32,
+                        received: *RECEIVED_MESSAGE_SIZE as f32,
                     },
+                    number_of_involved_devices: number_of_gateway_members,
                 },
                 gateway: StateCostType {
                     exchange: ExchangeType {
                         sent: 1,
-                        received: 1,
+                        received: number_of_neighbors,
                     },
                     exchange_cost: ExchangeCostType {
-                        sent: 0.1,
-                        received: 0.1,
+                        sent: *SENT_MESSAGE_SIZE as f32,
+                        received: *RECEIVED_MESSAGE_SIZE as f32,
                     },
+                    number_of_involved_devices: 1,
                 },
                 left: StateCostType {
                     exchange: ExchangeType {
@@ -222,9 +239,10 @@ pub fn get_metrics(
                         received: 1,
                     },
                     exchange_cost: ExchangeCostType {
-                        sent: 0.1,
-                        received: 0.1,
+                        sent: *SENT_MESSAGE_SIZE as f32,
+                        received: *RECEIVED_MESSAGE_SIZE as f32,
                     },
+                    number_of_involved_devices: 0,
                 },
             },
         },
