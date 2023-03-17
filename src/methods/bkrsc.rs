@@ -8,8 +8,22 @@ use crate::{
 };
 
 lazy_static! {
-  static ref EPSB: f32 = env::var("EPSB").unwrap_or(0.0001.to_string()).parse::<f32>().unwrap();
-  static ref EPRB: f32 = env::var("EPRB").unwrap_or(0.0001.to_string()).parse::<f32>().unwrap();
+    static ref EPSB: f32 = env::var("EPSB")
+        .unwrap_or(0.0001.to_string())
+        .parse::<f32>()
+        .unwrap();
+    static ref EPRB: f32 = env::var("EPRB")
+        .unwrap_or(0.0001.to_string())
+        .parse::<f32>()
+        .unwrap();
+    static ref SENT_MESSAGE_SIZE: u32 = env::var("SENT_MESSAGE_SIZE")
+        .unwrap_or(16.to_string())
+        .parse::<u32>()
+        .unwrap();
+    static ref RECEIVED_MESSAGE_SIZE: u32 = env::var("RECEIVED_MESSAGE_SIZE")
+        .unwrap_or(16.to_string())
+        .parse::<u32>()
+        .unwrap();
 }
 
 pub fn get_metrics(
