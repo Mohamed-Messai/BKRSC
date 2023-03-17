@@ -252,8 +252,8 @@ pub fn get_metrics(
                 },
                 left: StateCostType {
                     exchange: ExchangeType {
-                        sent: 1,
-                        received: 1,
+                        sent: 0,
+                        received: 0,
                     },
                     exchange_cost: ExchangeCostType {
                         sent: *SENT_MESSAGE_SIZE as f32,
