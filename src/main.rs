@@ -6,8 +6,6 @@ use iot_metrics_simulation::{MetricsFor, NodesVec, NodeStatus, initialize_networ
 
 fn main() {
     dotenv().ok();
-    let key: i32 = env::var("key").unwrap_or(0.to_string()).parse::<i32>().unwrap();
-    println!("Key: {}", key);
     let mut vec:NodesVec = initialize_network(100, 10, 10, 15);
     for i in 0..vec.len() {
         println!("{:?}", vec[i]);
