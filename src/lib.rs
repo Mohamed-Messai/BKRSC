@@ -446,7 +446,7 @@ impl TotalEnergyConsumption<MetricsType> for NodesVec {
         metrics: MetricsType
     ) -> f32 {
         let mut total_energy_consumption = 0.0;
-        let mut involved_devices = 0;
+        let mut _involved_devices = 0;
         let filtered_nodes: _ = match metrics_for {
             MetricsFor::Constrained => {
                 let constrained_nodes: Vec<&Node> = match status {
@@ -461,7 +461,7 @@ impl TotalEnergyConsumption<MetricsType> for NodesVec {
                         .collect();
 
 
-                        involved_devices = match metrics.energy.compromised.constrained.involved_devices {
+                        _involved_devices = match metrics.energy.compromised.constrained.involved_devices {
                             InvolvedDevicesCount::All => self.len() as u32,
                             InvolvedDevicesCount::SameAsDefined | InvolvedDevicesCount::GatewayMembers => metrics.energy.compromised.constrained.number_of_involved_devices,
                             InvolvedDevicesCount::Neighbors => {
@@ -489,7 +489,7 @@ impl TotalEnergyConsumption<MetricsType> for NodesVec {
                         .clone()
                         .collect();
 
-                        involved_devices = match metrics.energy.leaving.constrained.involved_devices {
+                        _involved_devices = match metrics.energy.leaving.constrained.involved_devices {
                             InvolvedDevicesCount::All => self.len() as u32,
                             InvolvedDevicesCount::SameAsDefined | InvolvedDevicesCount::GatewayMembers => metrics.energy.leaving.constrained.number_of_involved_devices,
                             InvolvedDevicesCount::Neighbors => {
@@ -517,7 +517,7 @@ impl TotalEnergyConsumption<MetricsType> for NodesVec {
                         .clone()
                         .collect();
 
-                        involved_devices = match metrics.energy.draining.constrained.involved_devices {
+                        _involved_devices = match metrics.energy.draining.constrained.involved_devices {
                             InvolvedDevicesCount::All => self.len() as u32,
                             InvolvedDevicesCount::SameAsDefined | InvolvedDevicesCount::GatewayMembers => metrics.energy.draining.constrained.number_of_involved_devices,
                             InvolvedDevicesCount::Neighbors => {
@@ -545,7 +545,7 @@ impl TotalEnergyConsumption<MetricsType> for NodesVec {
                 .clone()
                 .collect();
 
-                involved_devices = match metrics.energy.compromised.gateway.involved_devices {
+                _involved_devices = match metrics.energy.compromised.gateway.involved_devices {
                     InvolvedDevicesCount::All => self.len() as u32,
                     InvolvedDevicesCount::SameAsDefined | InvolvedDevicesCount::GatewayMembers => metrics.energy.compromised.gateway.number_of_involved_devices,
                     InvolvedDevicesCount::Neighbors => {
@@ -566,18 +566,18 @@ impl TotalEnergyConsumption<MetricsType> for NodesVec {
             MetricsFor::All => {
                 let devices = self.iter().collect();
 
-                involved_devices = 0; // TODO: Not covered yet
+                _involved_devices = 0; // TODO: Not covered yet
 
                 devices
             }
         };
         for node in filtered_nodes.iter() {
             if metrics_for == MetricsFor::Constrained && node.kind == NodeType::Constrained {
-                total_energy_consumption += node.energy_consumption(status, metrics) * involved_devices as f32;
+                total_energy_consumption += node.energy_consumption(status, metrics) * _involved_devices as f32;
             } else if metrics_for == MetricsFor::Gateway && node.kind == NodeType::Gateway {
-                total_energy_consumption += node.energy_consumption(status, metrics) * involved_devices as f32;
+                total_energy_consumption += node.energy_consumption(status, metrics) * _involved_devices as f32;
             } else if metrics_for == MetricsFor::All {
-                total_energy_consumption += node.energy_consumption(status, metrics) * involved_devices as f32;
+                total_energy_consumption += node.energy_consumption(status, metrics) * _involved_devices as f32;
             }
         }
         total_energy_consumption
@@ -592,7 +592,7 @@ impl TotalCommunicationOverhead<MetricsType> for NodesVec {
         metrics: MetricsType
     ) -> f32 {
         let mut total_communication_overhead = 0.0;
-        let mut involved_devices = 0;
+        let mut _involved_devices = 0;
         let filtered_nodes: _ = match metrics_for {
             MetricsFor::Constrained => {
                 let constrained_nodes: Vec<&Node> = match status {
@@ -606,7 +606,7 @@ impl TotalCommunicationOverhead<MetricsType> for NodesVec {
                         .clone()
                         .collect();
 
-                        involved_devices = match metrics.communication.compromised.constrained.involved_devices {
+                        _involved_devices = match metrics.communication.compromised.constrained.involved_devices {
                             InvolvedDevicesCount::All => self.len() as u32,
                             InvolvedDevicesCount::SameAsDefined | InvolvedDevicesCount::GatewayMembers => metrics.communication.compromised.constrained.number_of_involved_devices,
                             InvolvedDevicesCount::Neighbors => {
@@ -634,7 +634,7 @@ impl TotalCommunicationOverhead<MetricsType> for NodesVec {
                         .clone()
                         .collect();
 
-                        involved_devices = match metrics.communication.leaving.constrained.involved_devices {
+                        _involved_devices = match metrics.communication.leaving.constrained.involved_devices {
                             InvolvedDevicesCount::All => self.len() as u32,
                             InvolvedDevicesCount::SameAsDefined | InvolvedDevicesCount::GatewayMembers => metrics.communication.leaving.constrained.number_of_involved_devices,
                             InvolvedDevicesCount::Neighbors => {
@@ -662,7 +662,7 @@ impl TotalCommunicationOverhead<MetricsType> for NodesVec {
                         .clone()
                         .collect();
 
-                        involved_devices = match metrics.communication.draining.constrained.involved_devices {
+                        _involved_devices = match metrics.communication.draining.constrained.involved_devices {
                             InvolvedDevicesCount::All => self.len() as u32,
                             InvolvedDevicesCount::SameAsDefined | InvolvedDevicesCount::GatewayMembers => metrics.communication.draining.constrained.number_of_involved_devices,
                             InvolvedDevicesCount::Neighbors => {
@@ -690,7 +690,7 @@ impl TotalCommunicationOverhead<MetricsType> for NodesVec {
                 .clone()
                 .collect();
 
-                involved_devices = match metrics.communication.compromised.gateway.involved_devices {
+                _involved_devices = match metrics.communication.compromised.gateway.involved_devices {
                     InvolvedDevicesCount::All => self.len() as u32,
                     InvolvedDevicesCount::SameAsDefined | InvolvedDevicesCount::GatewayMembers => metrics.communication.compromised.gateway.number_of_involved_devices,
                     InvolvedDevicesCount::Neighbors => {
@@ -711,18 +711,18 @@ impl TotalCommunicationOverhead<MetricsType> for NodesVec {
             MetricsFor::All => {
                 let devices = self.iter().collect();
 
-                involved_devices = 0;
+                _involved_devices = 0;
 
                 devices
             }
         };
         for node in filtered_nodes.iter() {
             if metrics_for == MetricsFor::Constrained && node.kind == NodeType::Constrained {
-                total_communication_overhead += node.communication_overhead(status, metrics) * involved_devices as f32;
+                total_communication_overhead += node.communication_overhead(status, metrics) * _involved_devices as f32;
             } else if metrics_for == MetricsFor::Gateway && node.kind == NodeType::Gateway {
-                total_communication_overhead += node.communication_overhead(status, metrics) * involved_devices as f32;
+                total_communication_overhead += node.communication_overhead(status, metrics) * _involved_devices as f32;
             } else if metrics_for == MetricsFor::All {
-                total_communication_overhead += node.communication_overhead(status, metrics) * involved_devices as f32;
+                total_communication_overhead += node.communication_overhead(status, metrics) * _involved_devices as f32;
             }
         }
         total_communication_overhead

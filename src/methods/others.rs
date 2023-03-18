@@ -28,7 +28,7 @@ lazy_static! {
 
 pub fn get_metrics(
     number_of_nodes: u32,
-    number_of_gateway_members: u32,
+    _number_of_gateway_members: u32,
     number_of_neighbors: u32,
 ) -> MetricsType {
     let metrics = MetricsType {
