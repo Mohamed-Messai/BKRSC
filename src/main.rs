@@ -354,11 +354,7 @@ fn simulate(
         ));
     }
 
-    // Print the results as a vector of tuples (index + 1, energy consumption)
-    // Print another vector of tuples (index + 1, communication overhead)
-    // This is for each of the compromised, leaving and draining nodes
-    // It is also for both BKRS and others
-    println!("BKRS-COMPROMISED-ENERGY");
+    println!("BKRSC-COMPROMISED-ENERGY");
     for i in 0..bkrsc_compromised_average.len() {
         println!("({}, {})", i + 1, bkrsc_compromised_average[i].0);
     }
@@ -366,7 +362,7 @@ fn simulate(
     for i in 0..others_compromised_average.len() {
         println!("({}, {})", i + 1, others_compromised_average[i].0);
     }
-    println!("BKRS-COMPROMISED-COMMUNICATION");
+    println!("BKRSC-COMPROMISED-COMMUNICATION");
     for i in 0..bkrsc_compromised_average.len() {
         println!("({}, {})", i + 1, bkrsc_compromised_average[i].1);
     }
@@ -375,7 +371,7 @@ fn simulate(
         println!("({}, {})", i + 1, others_compromised_average[i].1);
     }
 
-    println!("BKRS-LEAVING-ENERGY");
+    println!("BKRSC-LEAVING-ENERGY");
     for i in 0..bkrsc_leaving_average.len() {
         println!("({}, {})", i + 1, bkrsc_leaving_average[i].0);
     }
@@ -383,7 +379,7 @@ fn simulate(
     for i in 0..others_leaving_average.len() {
         println!("({}, {})", i + 1, others_leaving_average[i].0);
     }
-    println!("BKRS-LEAVING-COMMUNICATION");
+    println!("BKRSC-LEAVING-COMMUNICATION");
     for i in 0..bkrsc_leaving_average.len() {
         println!("({}, {})", i + 1, bkrsc_leaving_average[i].1);
     }
@@ -392,7 +388,7 @@ fn simulate(
         println!("({}, {})", i + 1, others_leaving_average[i].1);
     }
 
-    println!("BKRS-DRAINING-ENERGY");
+    println!("BKRSC-DRAINING-ENERGY");
     for i in 0..bkrsc_draining_average.len() {
         println!("({}, {})", i + 1, bkrsc_draining_average[i].0);
     }
@@ -400,7 +396,7 @@ fn simulate(
     for i in 0..others_draining_average.len() {
         println!("({}, {})", i + 1, others_draining_average[i].0);
     }
-    println!("BKRS-DRAINING-COMMUNICATION");
+    println!("BKRSC-DRAINING-COMMUNICATION");
     for i in 0..bkrsc_draining_average.len() {
         println!("({}, {})", i + 1, bkrsc_draining_average[i].1);
     }
