@@ -18,6 +18,14 @@ pub enum InvolvedDevicesCount {
     SameAsDefined,
 }
 
+#[derive(Debug, PartialEq, Eq, Clone, Copy)]
+pub enum InvolvedExchangesCount {
+    Neighbors,
+    GatewayMembers,
+    All,
+    SameAsDefined,
+}
+
 #[derive(Debug, PartialEq, Clone, Copy)]
 pub struct EnergyConsumptionType {
     pub constrained: StateCostType,
@@ -36,6 +44,7 @@ pub struct CommunicationOverheadType {
 pub struct ExchangeType {
     pub sent: u32,
     pub received: u32,
+    pub messages: (InvolvedExchangesCount, InvolvedExchangesCount)
 }
 
 #[derive(Debug, PartialEq, Clone, Copy)]
@@ -104,6 +113,15 @@ impl EnergyType {
         dc_involved_devices_t: InvolvedDevicesCount,
         dg_involved_devices_t: InvolvedDevicesCount,
         dl_involved_devices_t: InvolvedDevicesCount,
+        cc_involved_exchanges_t: (InvolvedExchangesCount, InvolvedExchangesCount),
+        cg_involved_exchanges_t: (InvolvedExchangesCount, InvolvedExchangesCount),
+        cl_involved_exchanges_t: (InvolvedExchangesCount, InvolvedExchangesCount),
+        lc_involved_exchanges_t: (InvolvedExchangesCount, InvolvedExchangesCount),
+        lg_involved_exchanges_t: (InvolvedExchangesCount, InvolvedExchangesCount),
+        ll_involved_exchanges_t: (InvolvedExchangesCount, InvolvedExchangesCount),
+        dc_involved_exchanges_t: (InvolvedExchangesCount, InvolvedExchangesCount),
+        dg_involved_exchanges_t: (InvolvedExchangesCount, InvolvedExchangesCount),
+        dl_involved_exchanges_t: (InvolvedExchangesCount, InvolvedExchangesCount),
     ) -> Self {
         Self {
             compromised: EnergyConsumptionType {
@@ -111,6 +129,7 @@ impl EnergyType {
                     exchange: ExchangeType {
                         sent: compromised_sent,
                         received: compromised_received,
+                        messages: cc_involved_exchanges_t,
                     },
                     exchange_cost: ExchangeCostType {
                         sent: compromised_sent_cost,
@@ -123,6 +142,7 @@ impl EnergyType {
                     exchange: ExchangeType {
                         sent: compromised_sent,
                         received: compromised_received,
+                        messages: cg_involved_exchanges_t,
                     },
                     exchange_cost: ExchangeCostType {
                         sent: compromised_sent_cost,
@@ -135,6 +155,7 @@ impl EnergyType {
                     exchange: ExchangeType {
                         sent: compromised_sent,
                         received: compromised_received,
+                        messages: cl_involved_exchanges_t,
                     },
                     exchange_cost: ExchangeCostType {
                         sent: compromised_sent_cost,
@@ -149,6 +170,7 @@ impl EnergyType {
                     exchange: ExchangeType {
                         sent: leaving_sent,
                         received: leaving_received,
+                        messages: lc_involved_exchanges_t,
                     },
                     exchange_cost: ExchangeCostType {
                         sent: leaving_sent_cost,
@@ -161,6 +183,7 @@ impl EnergyType {
                     exchange: ExchangeType {
                         sent: leaving_sent,
                         received: leaving_received,
+                        messages: lg_involved_exchanges_t,
                     },
                     exchange_cost: ExchangeCostType {
                         sent: leaving_sent_cost,
@@ -173,6 +196,7 @@ impl EnergyType {
                     exchange: ExchangeType {
                         sent: leaving_sent,
                         received: leaving_received,
+                        messages: ll_involved_exchanges_t,
                     },
                     exchange_cost: ExchangeCostType {
                         sent: leaving_sent_cost,
@@ -187,6 +211,7 @@ impl EnergyType {
                     exchange: ExchangeType {
                         sent: draining_sent,
                         received: draining_received,
+                        messages: dc_involved_exchanges_t,
                     },
                     exchange_cost: ExchangeCostType {
                         sent: draining_sent_cost,
@@ -199,6 +224,7 @@ impl EnergyType {
                     exchange: ExchangeType {
                         sent: draining_sent,
                         received: draining_received,
+                        messages: dg_involved_exchanges_t,
                     },
                     exchange_cost: ExchangeCostType {
                         sent: draining_sent_cost,
@@ -211,6 +237,7 @@ impl EnergyType {
                     exchange: ExchangeType {
                         sent: draining_sent,
                         received: draining_received,
+                        messages: dl_involved_exchanges_t,
                     },
                     exchange_cost: ExchangeCostType {
                         sent: draining_sent_cost,
@@ -256,6 +283,15 @@ impl CommunicationType {
         dc_involved_devices_t: InvolvedDevicesCount,
         dg_involved_devices_t: InvolvedDevicesCount,
         dl_involved_devices_t: InvolvedDevicesCount,
+        cc_involved_exchanges_t: (InvolvedExchangesCount, InvolvedExchangesCount),
+        cg_involved_exchanges_t: (InvolvedExchangesCount, InvolvedExchangesCount),
+        cl_involved_exchanges_t: (InvolvedExchangesCount, InvolvedExchangesCount),
+        lc_involved_exchanges_t: (InvolvedExchangesCount, InvolvedExchangesCount),
+        lg_involved_exchanges_t: (InvolvedExchangesCount, InvolvedExchangesCount),
+        ll_involved_exchanges_t: (InvolvedExchangesCount, InvolvedExchangesCount),
+        dc_involved_exchanges_t: (InvolvedExchangesCount, InvolvedExchangesCount),
+        dg_involved_exchanges_t: (InvolvedExchangesCount, InvolvedExchangesCount),
+        dl_involved_exchanges_t: (InvolvedExchangesCount, InvolvedExchangesCount),
     ) -> Self {
         Self {
             compromised: CommunicationOverheadType {
@@ -263,6 +299,7 @@ impl CommunicationType {
                     exchange: ExchangeType {
                         sent: compromised_sent,
                         received: compromised_received,
+                        messages: cc_involved_exchanges_t,
                     },
                     exchange_cost: ExchangeCostType {
                         sent: compromised_sent_cost,
@@ -275,6 +312,7 @@ impl CommunicationType {
                     exchange: ExchangeType {
                         sent: compromised_sent,
                         received: compromised_received,
+                        messages: cg_involved_exchanges_t,
                     },
                     exchange_cost: ExchangeCostType {
                         sent: compromised_sent_cost,
@@ -287,6 +325,7 @@ impl CommunicationType {
                     exchange: ExchangeType {
                         sent: compromised_sent,
                         received: compromised_received,
+                        messages: cl_involved_exchanges_t,
                     },
                     exchange_cost: ExchangeCostType {
                         sent: compromised_sent_cost,
@@ -301,6 +340,7 @@ impl CommunicationType {
                     exchange: ExchangeType {
                         sent: leaving_sent,
                         received: leaving_received,
+                        messages: lc_involved_exchanges_t,
                     },
                     exchange_cost: ExchangeCostType {
                         sent: leaving_sent_cost,
@@ -313,6 +353,7 @@ impl CommunicationType {
                     exchange: ExchangeType {
                         sent: leaving_sent,
                         received: leaving_received,
+                        messages: lg_involved_exchanges_t,
                     },
                     exchange_cost: ExchangeCostType {
                         sent: leaving_sent_cost,
@@ -325,6 +366,7 @@ impl CommunicationType {
                     exchange: ExchangeType {
                         sent: leaving_sent,
                         received: leaving_received,
+                        messages: ll_involved_exchanges_t,
                     },
                     exchange_cost: ExchangeCostType {
                         sent: leaving_sent_cost,
@@ -339,6 +381,7 @@ impl CommunicationType {
                     exchange: ExchangeType {
                         sent: draining_sent,
                         received: draining_received,
+                        messages: dc_involved_exchanges_t,
                     },
                     exchange_cost: ExchangeCostType {
                         sent: draining_sent_cost,
@@ -351,6 +394,7 @@ impl CommunicationType {
                     exchange: ExchangeType {
                         sent: draining_sent,
                         received: draining_received,
+                        messages: dg_involved_exchanges_t,
                     },
                     exchange_cost: ExchangeCostType {
                         sent: draining_sent_cost,
@@ -363,6 +407,7 @@ impl CommunicationType {
                     exchange: ExchangeType {
                         sent: draining_sent,
                         received: draining_received,
+                        messages: dl_involved_exchanges_t,
                     },
                     exchange_cost: ExchangeCostType {
                         sent: draining_sent_cost,

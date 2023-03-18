@@ -4,7 +4,7 @@ use lazy_static::lazy_static;
 
 use crate::{
     CommunicationOverheadType, CommunicationType, EnergyConsumptionType, EnergyType,
-    ExchangeCostType, ExchangeType, MetricsType, StateCostType, InvolvedDevicesCount,
+    ExchangeCostType, ExchangeType, MetricsType, StateCostType, InvolvedDevicesCount, InvolvedExchangesCount,
 };
 
 lazy_static! {
@@ -38,6 +38,7 @@ pub fn get_metrics(
                     exchange: ExchangeType {
                         sent: 1,
                         received: 1,
+                        messages: (InvolvedExchangesCount::SameAsDefined, InvolvedExchangesCount::SameAsDefined),
                     },
                     exchange_cost: ExchangeCostType {
                         sent: *EPSB,
@@ -50,6 +51,7 @@ pub fn get_metrics(
                     exchange: ExchangeType {
                         sent: 1,
                         received: number_of_nodes,
+                        messages: (InvolvedExchangesCount::SameAsDefined, InvolvedExchangesCount::All),
                     },
                     exchange_cost: ExchangeCostType {
                         sent: 0f32,
@@ -62,6 +64,7 @@ pub fn get_metrics(
                     exchange: ExchangeType {
                         sent: 0,
                         received: 0,
+                        messages: (InvolvedExchangesCount::SameAsDefined, InvolvedExchangesCount::SameAsDefined),
                     },
                     exchange_cost: ExchangeCostType {
                         sent: *EPSB,
@@ -76,6 +79,7 @@ pub fn get_metrics(
                     exchange: ExchangeType {
                         sent: 1,
                         received: number_of_nodes - 1,
+                        messages: (InvolvedExchangesCount::SameAsDefined, InvolvedExchangesCount::All),
                     },
                     exchange_cost: ExchangeCostType {
                         sent: *EPSB,
@@ -88,6 +92,7 @@ pub fn get_metrics(
                     exchange: ExchangeType {
                         sent: 1,
                         received: number_of_nodes,
+                        messages: (InvolvedExchangesCount::SameAsDefined, InvolvedExchangesCount::All),
                     },
                     exchange_cost: ExchangeCostType {
                         sent: 0f32,
@@ -100,6 +105,7 @@ pub fn get_metrics(
                     exchange: ExchangeType {
                         sent: 0,
                         received: 0,
+                        messages: (InvolvedExchangesCount::SameAsDefined, InvolvedExchangesCount::SameAsDefined),
                     },
                     exchange_cost: ExchangeCostType {
                         sent: *EPSB,
@@ -114,6 +120,7 @@ pub fn get_metrics(
                     exchange: ExchangeType {
                         sent: 1,
                         received: 1,
+                        messages: (InvolvedExchangesCount::SameAsDefined, InvolvedExchangesCount::SameAsDefined),
                     },
                     exchange_cost: ExchangeCostType {
                         sent: *EPSB,
@@ -126,6 +133,7 @@ pub fn get_metrics(
                     exchange: ExchangeType {
                         sent: 0,
                         received: 0,
+                        messages: (InvolvedExchangesCount::SameAsDefined, InvolvedExchangesCount::SameAsDefined),
                     },
                     exchange_cost: ExchangeCostType {
                         sent: 0f32,
@@ -138,6 +146,7 @@ pub fn get_metrics(
                     exchange: ExchangeType {
                         sent: 1,
                         received: number_of_neighbors,
+                        messages: (InvolvedExchangesCount::SameAsDefined, InvolvedExchangesCount::Neighbors),
                     },
                     exchange_cost: ExchangeCostType {
                         sent: *EPSB,
@@ -154,6 +163,7 @@ pub fn get_metrics(
                     exchange: ExchangeType {
                         sent: 1,
                         received: 1,
+                        messages: (InvolvedExchangesCount::SameAsDefined, InvolvedExchangesCount::SameAsDefined),
                     },
                     exchange_cost: ExchangeCostType {
                         sent: *SENT_MESSAGE_SIZE as f32,
@@ -166,6 +176,7 @@ pub fn get_metrics(
                     exchange: ExchangeType {
                         sent: 1,
                         received: number_of_nodes,
+                        messages: (InvolvedExchangesCount::SameAsDefined, InvolvedExchangesCount::All),
                     },
                     exchange_cost: ExchangeCostType {
                         sent: *SENT_MESSAGE_SIZE as f32,
@@ -178,6 +189,7 @@ pub fn get_metrics(
                     exchange: ExchangeType {
                         sent: 0,
                         received: 0,
+                        messages: (InvolvedExchangesCount::SameAsDefined, InvolvedExchangesCount::SameAsDefined),
                     },
                     exchange_cost: ExchangeCostType {
                         sent: *SENT_MESSAGE_SIZE as f32,
@@ -192,6 +204,7 @@ pub fn get_metrics(
                     exchange: ExchangeType {
                         sent: 1,
                         received: number_of_nodes - 1,
+                        messages: (InvolvedExchangesCount::SameAsDefined, InvolvedExchangesCount::All),
                     },
                     exchange_cost: ExchangeCostType {
                         sent: *SENT_MESSAGE_SIZE as f32,
@@ -204,6 +217,7 @@ pub fn get_metrics(
                     exchange: ExchangeType {
                         sent: 1,
                         received: number_of_nodes - 1,
+                        messages: (InvolvedExchangesCount::SameAsDefined, InvolvedExchangesCount::All),
                     },
                     exchange_cost: ExchangeCostType {
                         sent: *SENT_MESSAGE_SIZE as f32,
@@ -216,6 +230,7 @@ pub fn get_metrics(
                     exchange: ExchangeType {
                         sent: 0,
                         received: 0,
+                        messages: (InvolvedExchangesCount::SameAsDefined, InvolvedExchangesCount::SameAsDefined),
                     },
                     exchange_cost: ExchangeCostType {
                         sent: *SENT_MESSAGE_SIZE as f32,
@@ -230,6 +245,7 @@ pub fn get_metrics(
                     exchange: ExchangeType {
                         sent: 1,
                         received: 1,
+                        messages: (InvolvedExchangesCount::SameAsDefined, InvolvedExchangesCount::SameAsDefined),
                     },
                     exchange_cost: ExchangeCostType {
                         sent: *SENT_MESSAGE_SIZE as f32,
@@ -242,6 +258,7 @@ pub fn get_metrics(
                     exchange: ExchangeType {
                         sent: 0,
                         received: 0,
+                        messages: (InvolvedExchangesCount::SameAsDefined, InvolvedExchangesCount::SameAsDefined),
                     },
                     exchange_cost: ExchangeCostType {
                         sent: *SENT_MESSAGE_SIZE as f32,
@@ -254,6 +271,7 @@ pub fn get_metrics(
                     exchange: ExchangeType {
                         sent: 1,
                         received: number_of_neighbors,
+                        messages: (InvolvedExchangesCount::SameAsDefined, InvolvedExchangesCount::Neighbors),
                     },
                     exchange_cost: ExchangeCostType {
                         sent: *SENT_MESSAGE_SIZE as f32,
