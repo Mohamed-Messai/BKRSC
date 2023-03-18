@@ -2,64 +2,163 @@ use std::env;
 
 use dotenv::dotenv;
 // use NodesVec from lib.rs
-use iot_metrics_simulation::{MetricsFor, NodesVec, NodeStatus, initialize_network, TotalEnergyConsumption, TotalCommunicationOverhead, MetricsType, EnergyType, CommunicationType, StateCostType, EnergyConsumptionType, ExchangeType, ExchangeCostType, CommunicationOverheadType, methods::{bkrsc::get_metrics as bkrsc_get_metrics, others::get_metrics as others_get_metrics}};
+use iot_metrics_simulation::{
+    initialize_network,
+    methods::{bkrsc::get_metrics as bkrsc_get_metrics, others::get_metrics as others_get_metrics},
+    CommunicationOverheadType, CommunicationType, EnergyConsumptionType, EnergyType,
+    ExchangeCostType, ExchangeType, MetricsFor, MetricsType, NodeStatus, NodesVec, StateCostType,
+    TotalCommunicationOverhead, TotalEnergyConsumption,
+};
 
 fn main() {
     dotenv().ok();
-    let mut vec:NodesVec = initialize_network(100, 10, 10, 15);
-    for i in 0..vec.len() {
-        println!("{:?}", vec[i]);
-    }
-    vec.compromise_nodes(10);
-    for i in 0..vec.len() {
-        println!("{:?}", vec[i]);
-    }
-    let compromised_nodes = vec.compromised_nodes();
-    println!("Compromised nodes: {:?}", compromised_nodes);
-    println!("Number of compromised nodes: {}", compromised_nodes.len());
-    // Println id of compromised nodes
-    for node in compromised_nodes.iter() {
-        println!("Compromised node id: {}", node.id);
-    }
-
-    let bkrsc_metrics = bkrsc_get_metrics(100, 10, 10);
-
-    let others_metrics = others_get_metrics(100, 10, 10);
-
-    println!("COMPROMISED-BKRSC: Total energy consumption: {}", vec.total_energy_consumption(NodeStatus::Compromised, MetricsFor::Constrained, bkrsc_metrics));
-    println!("COMPROMISED-BKRSC: Total communication overhead: {}", vec.total_communication_overhead(NodeStatus::Compromised, MetricsFor::Constrained, bkrsc_metrics));
-
-    println!("COMPROMISED-OTHERS: Total energy consumption: {}", vec.total_energy_consumption(NodeStatus::Compromised, MetricsFor::Constrained, others_metrics));
-    println!("COMPROMISED-OTHERS: Total communication overhead: {}", vec.total_communication_overhead(NodeStatus::Compromised, MetricsFor::Constrained, others_metrics));
-
-    vec.reset();
-
-    vec.leave_nodes(10);
-    
-    let leaving_nodes = vec.left_nodes();
-    for node in leaving_nodes.iter() {
-        println!("Leaving node id: {}", node.id);
-    }
-
-    println!("LEAVING-BKRSC: Total energy consumption: {}", vec.total_energy_consumption(NodeStatus::Leaving, MetricsFor::Constrained, bkrsc_metrics));
-    println!("LEAVING-BKRSC: Total communication overhead: {}", vec.total_communication_overhead(NodeStatus::Leaving, MetricsFor::Constrained, bkrsc_metrics));
-
-    println!("LEAVING-OTHERS: Total energy consumption: {}", vec.total_energy_consumption(NodeStatus::Leaving, MetricsFor::Constrained, others_metrics));
-    println!("LEAVING-OTHERS: Total communication overhead: {}", vec.total_communication_overhead(NodeStatus::Leaving, MetricsFor::Constrained, others_metrics));
-
-    vec.reset();
-
-    vec.drain_nodes(10);
-
-    let draining_nodes = vec.drained_nodes();
-    for node in draining_nodes.iter() {
-        println!("Draining node id: {}", node.id);
-    }
-
-    println!("DRAINED-BKRSC: Total energy consumption: {}", vec.total_energy_consumption(NodeStatus::Draining, MetricsFor::Constrained, bkrsc_metrics));
-    println!("DRAINED-BKRSC: Total communication overhead: {}", vec.total_communication_overhead(NodeStatus::Draining, MetricsFor::Constrained, bkrsc_metrics));
-
-    println!("DRAINED-OTHERS: Total energy consumption: {}", vec.total_energy_consumption(NodeStatus::Draining, MetricsFor::Constrained, others_metrics));
-    println!("DRAINED-OTHERS: Total communication overhead: {}", vec.total_communication_overhead(NodeStatus::Draining, MetricsFor::Constrained, others_metrics));
+    let number_of_nodes = env::var("NUMBER_OF_NODES")
+        .expect("NUMBER_OF_NODES must be set")
+        .parse::<i32>()
+        .expect("NUMBER_OF_NODES must be a number");
+    let number_of_gateways = env::var("NUMBER_OF_GATEWAYS")
+        .expect("NUMBER_OF_GATEWAYS must be set")
+        .parse::<i32>()
+        .expect("NUMBER_OF_GATEWAYS must be a number");
+    let number_of_min_possible_neighbors = env::var("NUMBER_OF_MIN_POSSIBLE_NEIGHBORS")
+        .expect("NUMBER_OF_MIN_POSSIBLE_NEIGHBORS must be set")
+        .parse::<i32>()
+        .expect("NUMBER_OF_MIN_POSSIBLE_NEIGHBORS must be a number");
+    let number_of_max_possible_neighbors = env::var("NUMBER_OF_MAX_POSSIBLE_NEIGHBORS")
+        .expect("NUMBER_OF_MAX_POSSIBLE_NEIGHBORS must be set")
+        .parse::<i32>()
+        .expect("NUMBER_OF_MAX_POSSIBLE_NEIGHBORS must be a number");
+    let number_of_gateway_members = env::var("NUMBER_OF_GATEWAY_MEMBERS")
+        .expect("NUMBER_OF_GATEWAY_MEMBERS must be set")
+        .parse::<i32>()
+        .expect("NUMBER_OF_GATEWAY_MEMBERS must be a number");
+    let vec: NodesVec = initialize_network(number_of_nodes, number_of_gateways, number_of_min_possible_neighbors, number_of_max_possible_neighbors);
+    simulate(vec, number_of_nodes, number_of_gateway_members, (number_of_min_possible_neighbors + number_of_max_possible_neighbors)/2 as i32);
 }
 
+fn simulate(mut vec: NodesVec, number_of_nodes: i32, number_of_gateway_members: i32, number_of_neighbors: i32) {
+    for i in 1..=10 {
+        vec.compromise_nodes(i);
+        let compromised_nodes = vec.compromised_nodes();
+
+        let bkrsc_metrics = bkrsc_get_metrics(number_of_nodes as u32, number_of_gateway_members as u32, number_of_neighbors as u32);
+
+        let others_metrics = others_get_metrics(number_of_nodes as u32, number_of_gateway_members as u32, number_of_neighbors as u32);
+
+        println!(
+            "COMPROMISED-BKRSC: Total energy consumption: {}",
+            vec.total_energy_consumption(
+                NodeStatus::Compromised,
+                MetricsFor::Constrained,
+                bkrsc_metrics
+            )
+        );
+        println!(
+            "COMPROMISED-BKRSC: Total communication overhead: {}",
+            vec.total_communication_overhead(
+                NodeStatus::Compromised,
+                MetricsFor::Constrained,
+                bkrsc_metrics
+            )
+        );
+
+        println!(
+            "COMPROMISED-OTHERS: Total energy consumption: {}",
+            vec.total_energy_consumption(
+                NodeStatus::Compromised,
+                MetricsFor::Constrained,
+                others_metrics
+            )
+        );
+        println!(
+            "COMPROMISED-OTHERS: Total communication overhead: {}",
+            vec.total_communication_overhead(
+                NodeStatus::Compromised,
+                MetricsFor::Constrained,
+                others_metrics
+            )
+        );
+
+        vec.reset();
+
+        vec.leave_nodes(i);
+
+        let leaving_nodes = vec.left_nodes();
+
+        println!(
+            "LEAVING-BKRSC: Total energy consumption: {}",
+            vec.total_energy_consumption(
+                NodeStatus::Leaving,
+                MetricsFor::Constrained,
+                bkrsc_metrics
+            )
+        );
+        println!(
+            "LEAVING-BKRSC: Total communication overhead: {}",
+            vec.total_communication_overhead(
+                NodeStatus::Leaving,
+                MetricsFor::Constrained,
+                bkrsc_metrics
+            )
+        );
+
+        println!(
+            "LEAVING-OTHERS: Total energy consumption: {}",
+            vec.total_energy_consumption(
+                NodeStatus::Leaving,
+                MetricsFor::Constrained,
+                others_metrics
+            )
+        );
+        println!(
+            "LEAVING-OTHERS: Total communication overhead: {}",
+            vec.total_communication_overhead(
+                NodeStatus::Leaving,
+                MetricsFor::Constrained,
+                others_metrics
+            )
+        );
+
+        vec.reset();
+
+        vec.drain_nodes(i);
+
+        let draining_nodes = vec.drained_nodes();
+
+        println!(
+            "DRAINED-BKRSC: Total energy consumption: {}",
+            vec.total_energy_consumption(
+                NodeStatus::Draining,
+                MetricsFor::Constrained,
+                bkrsc_metrics
+            )
+        );
+        println!(
+            "DRAINED-BKRSC: Total communication overhead: {}",
+            vec.total_communication_overhead(
+                NodeStatus::Draining,
+                MetricsFor::Constrained,
+                bkrsc_metrics
+            )
+        );
+
+        println!(
+            "DRAINED-OTHERS: Total energy consumption: {}",
+            vec.total_energy_consumption(
+                NodeStatus::Draining,
+                MetricsFor::Constrained,
+                others_metrics
+            )
+        );
+        println!(
+            "DRAINED-OTHERS: Total communication overhead: {}",
+            vec.total_communication_overhead(
+                NodeStatus::Draining,
+                MetricsFor::Constrained,
+                others_metrics
+            )
+        );
+
+        vec.reset();
+    }
+}
