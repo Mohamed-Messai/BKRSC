@@ -457,11 +457,11 @@ pub struct Node {
 
 // Create a trait for energy consumption in case of compromised node and another trait for energy consumption in case of leaving node, and another one for energy consumption in case of draining node
 trait EnergyConsumption<T, M> {
-    fn energy_consumption(&self, status: NodeStatus, metrics: M) -> f32;
+    fn energy_consumption(&self, nodes: &NodesVec, status: NodeStatus, metrics: M) -> f32;
 }
 
 trait CommunicationOverhead<T, M> {
-    fn communication_overhead(&self, status: NodeStatus, metrics: M) -> f32;
+    fn communication_overhead(&self, nodes: &NodesVec, status: NodeStatus, metrics: M) -> f32;
 }
 
 pub trait TotalEnergyConsumption<M> {
@@ -618,11 +618,11 @@ impl TotalEnergyConsumption<MetricsType> for NodesVec {
         };
         for node in filtered_nodes.iter() {
             if metrics_for == MetricsFor::Constrained && node.kind == NodeType::Constrained {
-                total_energy_consumption += node.energy_consumption(status, metrics) * _involved_devices as f32;
+                total_energy_consumption += node.energy_consumption(&*self, status, metrics) * _involved_devices as f32;
             } else if metrics_for == MetricsFor::Gateway && node.kind == NodeType::Gateway {
-                total_energy_consumption += node.energy_consumption(status, metrics) * _involved_devices as f32;
+                total_energy_consumption += node.energy_consumption(&*self, status, metrics) * _involved_devices as f32;
             } else if metrics_for == MetricsFor::All {
-                total_energy_consumption += node.energy_consumption(status, metrics) * _involved_devices as f32;
+                total_energy_consumption += node.energy_consumption(&*self, status, metrics) * _involved_devices as f32;
             }
         }
         total_energy_consumption
@@ -763,11 +763,11 @@ impl TotalCommunicationOverhead<MetricsType> for NodesVec {
         };
         for node in filtered_nodes.iter() {
             if metrics_for == MetricsFor::Constrained && node.kind == NodeType::Constrained {
-                total_communication_overhead += node.communication_overhead(status, metrics) * _involved_devices as f32;
+                total_communication_overhead += node.communication_overhead(&*self, status, metrics) * _involved_devices as f32;
             } else if metrics_for == MetricsFor::Gateway && node.kind == NodeType::Gateway {
-                total_communication_overhead += node.communication_overhead(status, metrics) * _involved_devices as f32;
+                total_communication_overhead += node.communication_overhead(&*self, status, metrics) * _involved_devices as f32;
             } else if metrics_for == MetricsFor::All {
-                total_communication_overhead += node.communication_overhead(status, metrics) * _involved_devices as f32;
+                total_communication_overhead += node.communication_overhead(&*self, status, metrics) * _involved_devices as f32;
             }
         }
         total_communication_overhead
@@ -775,19 +775,23 @@ impl TotalCommunicationOverhead<MetricsType> for NodesVec {
 }
 
 impl EnergyConsumption<Node, MetricsType> for Node {
-    fn energy_consumption(&self, status: NodeStatus, metrics: MetricsType) -> f32 {
+    fn energy_consumption(&self, nodes: &NodesVec, status: NodeStatus, metrics: MetricsType) -> f32 {
         match status {
             NodeStatus::Compromised => match self.kind {
                 NodeType::Gateway => {
-                    (metrics.energy.compromised.gateway.exchange.sent as f32
+                    let involved_sent_messages: u32 = self.calculate_involved_messages(&*nodes, metrics.energy.compromised.gateway.exchange.messages.0, metrics.energy.compromised.gateway.exchange.sent);
+                    let involved_received_messages: u32 = self.calculate_involved_messages(&*nodes, metrics.energy.compromised.gateway.exchange.messages.1, metrics.energy.compromised.gateway.exchange.received);
+                    (involved_sent_messages as f32
                         * metrics.energy.compromised.gateway.exchange_cost.sent)
-                        + (metrics.energy.compromised.gateway.exchange.received as f32
+                        + (involved_received_messages as f32
                             * metrics.energy.compromised.gateway.exchange_cost.received)
                 }
                 NodeType::Constrained => {
-                    (metrics.energy.compromised.constrained.exchange.sent as f32
+                    let involved_sent_messages: u32 = self.calculate_involved_messages(&*nodes, metrics.energy.compromised.constrained.exchange.messages.0, metrics.energy.compromised.constrained.exchange.sent);
+                    let involved_received_messages: u32 = self.calculate_involved_messages(&*nodes, metrics.energy.compromised.constrained.exchange.messages.1, metrics.energy.compromised.constrained.exchange.received);
+                    (involved_sent_messages as f32
                         * metrics.energy.compromised.constrained.exchange_cost.sent)
-                        + (metrics.energy.compromised.constrained.exchange.received as f32
+                        + (involved_received_messages as f32
                             * metrics
                                 .energy
                                 .compromised
@@ -798,29 +802,37 @@ impl EnergyConsumption<Node, MetricsType> for Node {
             },
             NodeStatus::Leaving => match self.kind {
                 NodeType::Gateway => {
-                    (metrics.energy.leaving.gateway.exchange.sent as f32
+                    let involved_sent_messages: u32 = self.calculate_involved_messages(&*nodes, metrics.energy.leaving.gateway.exchange.messages.0, metrics.energy.leaving.gateway.exchange.sent);
+                    let involved_received_messages: u32 = self.calculate_involved_messages(&*nodes, metrics.energy.leaving.gateway.exchange.messages.1, metrics.energy.leaving.gateway.exchange.received);
+                    (involved_sent_messages as f32
                         * metrics.energy.leaving.gateway.exchange_cost.sent)
-                        + (metrics.energy.leaving.gateway.exchange.received as f32
+                        + (involved_received_messages as f32
                             * metrics.energy.leaving.gateway.exchange_cost.received)
                 }
                 NodeType::Constrained => {
-                    (metrics.energy.leaving.constrained.exchange.sent as f32
+                    let involved_sent_messages: u32 = self.calculate_involved_messages(&*nodes, metrics.energy.leaving.constrained.exchange.messages.0, metrics.energy.leaving.constrained.exchange.sent);
+                    let involved_received_messages: u32 = self.calculate_involved_messages(&*nodes, metrics.energy.leaving.constrained.exchange.messages.1, metrics.energy.leaving.constrained.exchange.received);
+                    (involved_sent_messages as f32
                         * metrics.energy.leaving.constrained.exchange_cost.sent)
-                        + (metrics.energy.leaving.constrained.exchange.received as f32
+                        + (involved_received_messages as f32
                             * metrics.energy.leaving.constrained.exchange_cost.received)
                 }
             },
             NodeStatus::Draining => match self.kind {
                 NodeType::Gateway => {
-                    (metrics.energy.draining.gateway.exchange.sent as f32
+                    let involved_sent_messages: u32 = self.calculate_involved_messages(&*nodes, metrics.energy.draining.gateway.exchange.messages.0, metrics.energy.draining.gateway.exchange.sent);
+                    let involved_received_messages: u32 = self.calculate_involved_messages(&*nodes, metrics.energy.draining.gateway.exchange.messages.1, metrics.energy.draining.gateway.exchange.received);
+                    (involved_sent_messages as f32
                         * metrics.energy.draining.gateway.exchange_cost.sent)
-                        + (metrics.energy.draining.gateway.exchange.received as f32
+                        + (involved_received_messages as f32
                             * metrics.energy.draining.gateway.exchange_cost.received)
                 }
                 NodeType::Constrained => {
-                    (metrics.energy.draining.constrained.exchange.sent as f32
+                    let involved_sent_messages: u32 = self.calculate_involved_messages(&*nodes, metrics.energy.draining.constrained.exchange.messages.0, metrics.energy.draining.constrained.exchange.sent);
+                    let involved_received_messages: u32 = self.calculate_involved_messages(&*nodes, metrics.energy.draining.constrained.exchange.messages.1, metrics.energy.draining.constrained.exchange.received);
+                    (involved_sent_messages as f32
                         * metrics.energy.draining.constrained.exchange_cost.sent)
-                        + (metrics.energy.draining.constrained.exchange.received as f32
+                        + (involved_received_messages as f32
                             * metrics.energy.draining.constrained.exchange_cost.received)
                 }
             },
@@ -829,13 +841,15 @@ impl EnergyConsumption<Node, MetricsType> for Node {
 }
 
 impl CommunicationOverhead<Node, MetricsType> for Node {
-    fn communication_overhead(&self, status: NodeStatus, metrics: MetricsType) -> f32 {
+    fn communication_overhead(&self, nodes: &NodesVec, status: NodeStatus, metrics: MetricsType) -> f32 {
         match status {
             NodeStatus::Compromised => match self.kind {
                 NodeType::Gateway => {
-                    (metrics.communication.compromised.gateway.exchange.sent as f32
+                    let involved_sent_messages: u32 = self.calculate_involved_messages(&*nodes, metrics.communication.compromised.gateway.exchange.messages.0, metrics.communication.compromised.gateway.exchange.sent);
+                    let involved_received_messages: u32 = self.calculate_involved_messages(&*nodes, metrics.communication.compromised.gateway.exchange.messages.1, metrics.communication.compromised.gateway.exchange.received);
+                    (involved_sent_messages as f32
                         * metrics.communication.compromised.gateway.exchange_cost.sent)
-                        + (metrics.communication.compromised.gateway.exchange.received as f32
+                        + (involved_received_messages as f32
                             * metrics
                                 .communication
                                 .compromised
@@ -844,19 +858,16 @@ impl CommunicationOverhead<Node, MetricsType> for Node {
                                 .received)
                 }
                 NodeType::Constrained => {
-                    (metrics.communication.compromised.constrained.exchange.sent as f32
+                    let involved_sent_messages: u32 = self.calculate_involved_messages(&*nodes, metrics.communication.compromised.constrained.exchange.messages.0, metrics.communication.compromised.constrained.exchange.sent);
+                    let involved_received_messages: u32 = self.calculate_involved_messages(&*nodes, metrics.communication.compromised.constrained.exchange.messages.1, metrics.communication.compromised.constrained.exchange.received);
+                    (involved_sent_messages as f32
                         * metrics
                             .communication
                             .compromised
                             .constrained
                             .exchange_cost
                             .sent)
-                        + (metrics
-                            .communication
-                            .compromised
-                            .constrained
-                            .exchange
-                            .received as f32
+                        + (involved_received_messages as f32
                             * metrics
                                 .communication
                                 .compromised
@@ -867,15 +878,19 @@ impl CommunicationOverhead<Node, MetricsType> for Node {
             },
             NodeStatus::Leaving => match self.kind {
                 NodeType::Gateway => {
-                    (metrics.communication.leaving.gateway.exchange.sent as f32
+                    let involved_sent_messages: u32 = self.calculate_involved_messages(&*nodes, metrics.communication.leaving.gateway.exchange.messages.0, metrics.communication.leaving.gateway.exchange.sent);
+                    let involved_received_messages: u32 = self.calculate_involved_messages(&*nodes, metrics.communication.leaving.gateway.exchange.messages.1, metrics.communication.leaving.gateway.exchange.received);
+                    (involved_sent_messages as f32
                         * metrics.communication.leaving.gateway.exchange_cost.sent)
-                        + (metrics.communication.leaving.gateway.exchange.received as f32
+                        + (involved_received_messages as f32
                             * metrics.communication.leaving.gateway.exchange_cost.received)
                 }
                 NodeType::Constrained => {
-                    (metrics.communication.leaving.constrained.exchange.sent as f32
+                    let involved_sent_messages: u32 = self.calculate_involved_messages(&*nodes, metrics.communication.leaving.constrained.exchange.messages.0, metrics.communication.leaving.constrained.exchange.sent);
+                    let involved_received_messages: u32 = self.calculate_involved_messages(&*nodes, metrics.communication.leaving.constrained.exchange.messages.1, metrics.communication.leaving.constrained.exchange.received);
+                    (involved_sent_messages as f32
                         * metrics.communication.leaving.constrained.exchange_cost.sent)
-                        + (metrics.communication.leaving.constrained.exchange.received as f32
+                        + (involved_received_messages as f32
                             * metrics
                                 .communication
                                 .leaving
@@ -886,9 +901,11 @@ impl CommunicationOverhead<Node, MetricsType> for Node {
             },
             NodeStatus::Draining => match self.kind {
                 NodeType::Gateway => {
-                    (metrics.communication.draining.gateway.exchange.sent as f32
+                    let involved_sent_messages: u32 = self.calculate_involved_messages(&*nodes, metrics.communication.draining.gateway.exchange.messages.0, metrics.communication.draining.gateway.exchange.sent);
+                    let involved_received_messages: u32 = self.calculate_involved_messages(&*nodes, metrics.communication.draining.gateway.exchange.messages.1, metrics.communication.draining.gateway.exchange.received);
+                    (involved_sent_messages as f32
                         * metrics.communication.draining.gateway.exchange_cost.sent)
-                        + (metrics.communication.draining.gateway.exchange.received as f32
+                        + (involved_received_messages as f32
                             * metrics
                                 .communication
                                 .draining
@@ -897,14 +914,16 @@ impl CommunicationOverhead<Node, MetricsType> for Node {
                                 .received)
                 }
                 NodeType::Constrained => {
-                    (metrics.communication.draining.constrained.exchange.sent as f32
+                    let involved_sent_messages: u32 = self.calculate_involved_messages(&*nodes, metrics.communication.draining.constrained.exchange.messages.0, metrics.communication.draining.constrained.exchange.sent);
+                    let involved_received_messages: u32 = self.calculate_involved_messages(&*nodes, metrics.communication.draining.constrained.exchange.messages.1, metrics.communication.draining.constrained.exchange.received);
+                    (involved_sent_messages as f32
                         * metrics
                             .communication
                             .draining
                             .constrained
                             .exchange_cost
                             .sent)
-                        + (metrics.communication.draining.constrained.exchange.received as f32
+                        + (involved_received_messages as f32
                             * metrics
                                 .communication
                                 .draining
@@ -1051,6 +1070,57 @@ impl Node {
             is_compromised: false,
             is_leaving: false,
             is_draining: false,
+        }
+    }
+
+    fn calculate_involved_messages(&self, nodes: &NodesVec, exchanged_messages_count_type: InvolvedExchangesCount, exchanged_messages_count: u32) -> u32 {
+        match exchanged_messages_count_type {
+            InvolvedExchangesCount::SameAsDefined => exchanged_messages_count as u32,
+            InvolvedExchangesCount::Neighbors => {
+                nodes.iter()
+                    .filter(|node| self.neighbors.contains(&node.id))
+                    .filter(|node| node.kind == NodeType::Constrained)
+                    .filter(|node| node.is_compromised == false)
+                    .filter(|node| node.is_leaving == false)
+                    .filter(|node| node.is_draining == false)
+                    .count() as u32
+            },
+            InvolvedExchangesCount::All => (nodes.iter()
+                .filter(|node| node.kind == NodeType::Constrained)
+                .filter(|node| node.is_compromised == false)
+                .filter(|node| node.is_leaving == false)
+                .filter(|node| node.is_draining == false)
+                .count() - 1) as u32,
+            InvolvedExchangesCount::GatewayMembers => {
+                let mut devices_vec: Vec<usize> = vec![];
+                // Get neighbor nodes of the current node
+                let neighbors_ids = self.neighbors.clone();
+                // Get neighbors by their ids from the nodes vector that are gateways
+                let gateway_neighbors = nodes
+                    .iter()
+                    .filter(|node| neighbors_ids.contains(&node.id))
+                    .filter(|node| node.kind == NodeType::Gateway)
+                    .collect::<Vec<&Node>>();
+                // Get the neighbors length of these gateways
+                for gateway in gateway_neighbors.iter() {
+                    // Get neighbor constrained nodes of the current gateway
+                    let constrained_neighbors_ids = gateway.neighbors.clone();
+                    // Get neighbors by their ids from the nodes vector that are constrained 
+                    let constrained_neighbors = nodes
+                        .iter()
+                        .filter(|node| constrained_neighbors_ids.contains(&node.id))
+                        .filter(|node| node.kind == NodeType::Constrained)
+                        .filter(|node| node.id != self.id)
+                        .collect::<Vec<&Node>>();
+                    // Add devices ids to the devices vector without duplicates
+                    for constrained_neighbor in constrained_neighbors.iter() {
+                        if !devices_vec.contains(&constrained_neighbor.id) {
+                            devices_vec.push(constrained_neighbor.id);
+                        }
+                    }
+                }
+                devices_vec.len() as u32
+            }
         }
     }
 }
