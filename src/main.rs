@@ -1,3 +1,4 @@
+#![allow(unused_imports)]
 use std::env;
 
 use dotenv::dotenv;
