@@ -94,8 +94,7 @@ fn simulate(
 
         for i in min_affected_nodes..=max_affected_nodes {
             vec.compromise_nodes(i);
-            let compromised_nodes = vec.compromised_nodes();
-
+            
             println!(
                 "COMPROMISED-BKRSC: Total energy consumption: {}",
                 vec.total_energy_consumption(
@@ -165,8 +164,6 @@ fn simulate(
 
             vec.leave_nodes(i);
 
-            let leaving_nodes = vec.left_nodes();
-
             println!(
                 "LEAVING-BKRSC: Total energy consumption: {}",
                 vec.total_energy_consumption(
@@ -230,8 +227,6 @@ fn simulate(
             vec.reset();
 
             vec.drain_nodes(i);
-
-            let draining_nodes = vec.drained_nodes();
 
             println!(
                 "DRAINED-BKRSC: Total energy consumption: {}",
